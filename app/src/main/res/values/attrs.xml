@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageResourceView">
+        <attr name="thumbnailWidth" format="integer" />
+        <attr name="thumbnailHeight" format="integer" />
+    </declare-styleable>
+</resources>

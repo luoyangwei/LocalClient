@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/photo_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_photo"
+        android:title="@string/bottom_navigation_photo" />
+    <item
+        android:id="@+id/album_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_album"
+        android:title="@string/bottom_navigation_album" />
+    <item
+        android:id="@+id/cloud_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_cloud"
+        android:title="@string/bottom_navigation_cloud" />
+</menu>

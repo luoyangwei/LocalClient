@@ -1,0 +1,56 @@
+[versions]
+agp = "8.7.2"
+commonsIoVersion = "2.17.0"
+commonsLang3Version = "3.12.0"
+disklrucache = "2.0.2"
+eventbus = "3.3.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+activity = "1.8.0"
+constraintlayout = "2.1.4"
+gson = "2.11.0"
+lombok = "1.18.34"
+picasso = "2.8"
+retrofit = "2.11.0"
+roomRuntime = "2.6.1"
+roomCompiler = "2.6.1"
+legacySupportV4 = "1.0.0"
+lifecycleLivedataKtx = "2.6.1"
+lifecycleViewmodelKtx = "2.6.1"
+rxandroid = "1.2.1"
+rxjava = "3.1.9"
+xxpermissions = "20.0"
+
+[libraries]
+apache-commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
+commons-io-commons-io = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
+disklrucache = { module = "com.jakewharton:disklrucache", version.ref = "disklrucache" }
+eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+com-squareup-retrofit2-converter-gson2 = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+room-rxjava = { module = "androidx.room:room-rxjava3", version.ref = "roomRuntime" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "roomRuntime" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
+xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+
