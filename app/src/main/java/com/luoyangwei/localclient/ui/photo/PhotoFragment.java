@@ -60,7 +60,6 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         StrictMode.enableDefaults();
         ResourceService resourceService = new ResourceService(getContext());
 
-        // 首次展示 30 张，后面一直追加，直到没有数据
         List<Resource> resources = resourceService.getResources();
         adapter = new PhotoRecyclerViewAdapter(getContext(), resources);
         adapter.setOnClickListener(this);

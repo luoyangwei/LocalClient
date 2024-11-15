@@ -10,7 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
@@ -62,9 +65,15 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                 .setCrossFadeEnabled(true)
                 .build();
 
+        RequestOptions requestOptions = new RequestOptions()
+                .sizeMultiplier(0.5f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.LOW)
+                .centerCrop();
         Glide.with(context)
                 .load(resource.getFullPath())
                 .transition(DrawableTransitionOptions.with(crossFadeFactory))
+                .apply(requestOptions)
                 .into(holder.imageView);
 
         holder.imageView.setTransitionName(resource.getName());

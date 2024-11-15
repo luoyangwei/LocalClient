@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.luoyangwei.localclient.data.model.ImageResource;
 import com.luoyangwei.localclient.data.model.Resource;
+import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.ActivityPreviewBinding;
 import com.luoyangwei.localclient.ui.ApplicationActivity;
 
@@ -25,14 +26,21 @@ public class PreviewActivity extends ApplicationActivity {
         binding = ActivityPreviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        ResourceService resourceService = new ResourceService(this);
+        List<Resource> resources = resourceService.getResources();
+
         // 传过来的数据
         String resourceId = getIntent().getStringExtra("resourceId");
         Log.i(TAG, "resourceId: " + resourceId);
+        Resource resource = resources.stream()
+                .filter(r -> r.getId().equals(resourceId))
+                .findFirst()
+                .orElseThrow();
 
         // 启动动画效果
         postponeEnterTransition();
 
-//        initializePreviewViewpager(resources, resource);
+        initializePreviewViewpager(resources, resource);
 //        initializeThumbnails(resource);
     }
 

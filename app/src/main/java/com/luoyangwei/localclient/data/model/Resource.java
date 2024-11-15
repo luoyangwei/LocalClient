@@ -48,11 +48,6 @@ public class Resource {
      */
     private Integer orientation;
 
-    /**
-     * 图片
-     */
-    private Bitmap bitmap;
-
     @SuppressLint("Range")
     public Resource(Cursor cursor) {
         setId(String.format(Locale.getDefault(), "%d", cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID))));
