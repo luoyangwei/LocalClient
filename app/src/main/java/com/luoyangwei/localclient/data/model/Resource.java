@@ -2,7 +2,6 @@ package com.luoyangwei.localclient.data.model;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.provider.MediaStore;
 
 import java.util.Locale;
@@ -48,6 +47,16 @@ public class Resource {
      */
     private Integer orientation;
 
+    /**
+     * bucketId 文件夹ID
+     */
+    private String bucketId;
+
+    /**
+     * bucketName 文件夹名
+     */
+    private String bucketName;
+
     @SuppressLint("Range")
     public Resource(Cursor cursor) {
         setId(String.format(Locale.getDefault(), "%d", cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID))));
@@ -55,6 +64,8 @@ public class Resource {
         setFullName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
         setFullPath(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
         setOrientation(cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.ORIENTATION)));
+        setBucketId(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)));
+        setBucketName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)));
     }
 
 }

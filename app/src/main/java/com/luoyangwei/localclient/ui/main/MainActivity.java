@@ -12,6 +12,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.source.local.ResourceLoaderBackgroundService;
+import com.luoyangwei.localclient.data.source.local.ThumbnailGenerationService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
 import com.luoyangwei.localclient.ui.album.AlbumFragment;
 import com.luoyangwei.localclient.ui.cloud.CloudFragment;
@@ -39,7 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
         initializeBottomNavigationView();
         initializeDefaultFragment();
-        startupBackgroundResourceLoaderService();
+//        startupBackgroundResourceLoaderService();
+
+        Intent intent = new Intent(this, ThumbnailGenerationService.class);
+        startService(intent);
     }
 
     private MaterialContainerTransform materialContainerTransformBuilder() {

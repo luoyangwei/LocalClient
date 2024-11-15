@@ -82,6 +82,9 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     androidTestImplementation(libs.room.testing)
 
+    // https://github.com/zetbaitsu/Compressor
+    implementation(libs.compressor)
+
     // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava
     implementation(libs.rxjava)
 

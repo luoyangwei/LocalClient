@@ -2,6 +2,7 @@
 agp = "8.7.2"
 commonsIoVersion = "2.17.0"
 commonsLang3Version = "3.12.0"
+compressor = "3.0.1"
 disklrucache = "2.0.2"
 eventbus = "3.3.1"
 glide = "4.16.0"
@@ -9,6 +10,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
+luban = "1.1.8"
 material = "1.12.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
@@ -29,6 +31,7 @@ xxpermissions = "20.0"
 [libraries]
 apache-commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
 commons-io-commons-io = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
+compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 disklrucache = { module = "com.jakewharton:disklrucache", version.ref = "disklrucache" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -37,6 +40,7 @@ ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitV
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 com-squareup-retrofit2-converter-gson2 = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+luban = { module = "top.zibin:Luban", version.ref = "luban" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
