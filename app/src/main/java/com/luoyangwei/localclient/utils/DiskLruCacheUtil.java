@@ -1,9 +1,13 @@
 package com.luoyangwei.localclient.utils;
 
+import android.graphics.Bitmap;
+
 import com.jakewharton.disklrucache.DiskLruCache;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -74,29 +78,51 @@ public class DiskLruCacheUtil {
         }
     }
 
+    /**
+     * 将bitmap存入DiskLruCache
+     *
+     * @param key     key
+     * @param bitmap  bitmap
+     * @param format  Bitmap.CompressFormat
+     * @param quality 压缩质量
+     */
+    public void putBitmap(String key, Bitmap bitmap, Bitmap.CompressFormat format, int quality) {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(format, quality, outputStream);
+            putInputStream(key, new ByteArrayInputStream(outputStream.toByteArray()));
+            outputStream.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void putInputStream(String key, InputStream inputStream) {
         try {
             DiskLruCache.Editor editor = diskLruCache.edit(hashKeyForDisk(key));
             if (editor != null) {
+
                 OutputStream outputStream = editor.newOutputStream(0);
                 IOUtils.copy(inputStream, outputStream);
+
                 editor.commit();
+
                 diskLruCache.flush();
+
                 inputStream.close();
+
                 outputStream.flush();
                 outputStream.close();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
      * 判断是否存在key
      *
-     * @param diskLruCache DiskLruCache
-     * @param key          key
+     * @param key key
      * @return 是否存在
      */
     public boolean hasKey(String key) {

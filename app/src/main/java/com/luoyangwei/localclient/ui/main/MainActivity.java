@@ -1,5 +1,6 @@
 package com.luoyangwei.localclient.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import com.google.android.material.transition.platform.MaterialArcMotion;
 import com.google.android.material.transition.platform.MaterialContainerTransform;
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
+import com.luoyangwei.localclient.data.source.local.ResourceLoaderBackgroundService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
 import com.luoyangwei.localclient.ui.album.AlbumFragment;
 import com.luoyangwei.localclient.ui.cloud.CloudFragment;
@@ -78,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new PhotoFragment())
                 .commit();
-//        binding.toolbarTitle.setText(R.string.bottom_navigation_photo);
     }
 
     /**
@@ -89,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new AlbumFragment())
                 .commit();
-//        binding.toolbarTitle.setText(R.string.bottom_navigation_album);
     }
 
     /**
@@ -100,12 +100,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new CloudFragment())
                 .commit();
-//        binding.toolbarTitle.setText(R.string.bottom_navigation_cloud);
     }
 
     public void startupBackgroundResourceLoaderService() {
-//        Intent intent = new Intent(this, BackgroundResourceLoaderService.class);
-//        startForegroundService(intent);
-//        Log.i(TAG, "BackgroundResourceLoaderService 启动");
+        Intent intent = new Intent(this, ResourceLoaderBackgroundService.class);
+        startService(intent);
+        Log.i(TAG, "BackgroundResourceLoaderService 启动");
     }
 }

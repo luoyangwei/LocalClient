@@ -11,9 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.ImageResource;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -52,12 +50,12 @@ public class PreviewThumbnailsRecyclerViewAdapter extends RecyclerView.Adapter<P
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ImageResource resource = resources.get(position);
-        Picasso.get()
-                .load(new File(resource.getData()))
-                .resize(200, 200)
-                .placeholder(R.drawable.ic_image_load_placeholder)
-                .centerCrop()
-                .into(holder.imageView);
+//        Picasso.get()
+//                .load(new File(resource.getData()))
+//                .resize(200, 200)
+//                .placeholder(R.drawable.ic_image_load_placeholder)
+//                .centerCrop()
+//                .into(holder.imageView);
     }
 
     @Override

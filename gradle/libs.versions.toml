@@ -4,6 +4,7 @@ commonsIoVersion = "2.17.0"
 commonsLang3Version = "3.12.0"
 disklrucache = "2.0.2"
 eventbus = "3.3.1"
+glide = "4.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -21,6 +22,7 @@ legacySupportV4 = "1.0.0"
 lifecycleLivedataKtx = "2.6.1"
 lifecycleViewmodelKtx = "2.6.1"
 rxandroid = "1.2.1"
+rxandroidVersion = "3.0.0"
 rxjava = "3.1.9"
 xxpermissions = "20.0"
 
@@ -29,6 +31,7 @@ apache-commons-lang3 = { module = "org.apache.commons:commons-lang3", version.re
 commons-io-commons-io = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
 disklrucache = { module = "com.jakewharton:disklrucache", version.ref = "disklrucache" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -48,6 +51,7 @@ legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", ver
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+rxandroid-v300 = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroidVersion" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 

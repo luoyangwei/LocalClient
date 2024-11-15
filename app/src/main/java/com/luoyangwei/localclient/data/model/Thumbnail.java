@@ -22,4 +22,9 @@ public class Thumbnail {
     @ColumnInfo(name = "resource_id")
     public String resourceId;
 
+    /**
+     * 缩略图文件地址
+     */
+    @ColumnInfo(name = "path")
+    public String path;
 }

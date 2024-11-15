@@ -1,7 +1,6 @@
 package com.luoyangwei.localclient.ui.photo;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +9,13 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
-import com.luoyangwei.localclient.data.model.Thumbnail;
-import com.luoyangwei.localclient.data.repository.AppDatabase;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import lombok.Setter;
 
@@ -30,7 +27,6 @@ import lombok.Setter;
  */
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = PhotoRecyclerViewAdapter.class.getName();
-    private final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     private final Context context;
     private final List<Resource> resources;
@@ -62,28 +58,17 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Resource resource = resources.get(position);
-        Log.i(TAG, String.format("View image info [width: %d, height:%d, size: %d]",
-                resource.getBitmap().getWidth(), resource.getBitmap().getHeight(), resource.getBitmap().getByteCount()));
-        holder.imageView.setImageBitmap(resource.getBitmap());
+        DrawableCrossFadeFactory crossFadeFactory = new DrawableCrossFadeFactory.Builder()
+                .setCrossFadeEnabled(true)
+                .build();
+
+        Glide.with(context)
+                .load(resource.getFullPath())
+                .transition(DrawableTransitionOptions.with(crossFadeFactory))
+                .into(holder.imageView);
+
         holder.imageView.setTransitionName(resource.getName());
         holder.imageView.setOnClickListener(v -> onClickListener.onClick(v, resource));
-    }
-
-    private void insertThumbnail(Thumbnail thumbnail) {
-        AppDatabase.getInstance(context).thumbnailRepository().insert(thumbnail);
-    }
-
-
-    private Thumbnail getThumbnail(String resourceId) {
-        Thumbnail thumbnail;
-        try {
-            Future<Thumbnail> future = executor.submit(() ->
-                    AppDatabase.getInstance(context).thumbnailRepository().queryByResourceId(resourceId));
-            thumbnail = future.get();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return thumbnail;
     }
 
 
@@ -92,6 +77,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
         return resources.size();
     }
 
+    @Deprecated
     public void addItem(Resource entry) {
         resources.add(entry);
         notifyItemInserted(resources.size() - 1);

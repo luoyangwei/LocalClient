@@ -41,6 +41,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
                 android:background="@android:color/transparent"
+                app:iconTint="@color/md_theme_onSurfaceVariant"
                 app:layout_collapseMode="pin"
                 app:menu="@menu/toolbar_photo_menu" />
 
@@ -54,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        android:scrollbarSize="3dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

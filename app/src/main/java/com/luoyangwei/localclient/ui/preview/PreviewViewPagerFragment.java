@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.transition.platform.MaterialArcMotion;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.databinding.FragmentPreviewPagerViewBinding;
-import com.squareup.picasso.Picasso;
 
 public class PreviewViewPagerFragment extends Fragment {
     private static final String TAG = PreviewViewPagerFragment.class.getName();
@@ -65,7 +64,6 @@ public class PreviewViewPagerFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Picasso.get().cancelRequest(binding.previewImageView);
         super.onDestroyView();
     }
 

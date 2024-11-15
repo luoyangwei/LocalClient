@@ -66,8 +66,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation(libs.com.squareup.retrofit2.converter.gson2)
+
     // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
-    implementation(libs.picasso)
+//    implementation(libs.picasso)
+
+    // https://github.com/bumptech/glide
+    implementation(libs.glide)
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation(libs.gson)
@@ -82,7 +86,7 @@ dependencies {
     implementation(libs.rxjava)
 
     // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxandroid
-    implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
+    implementation(libs.rxandroid.v300)
 
 
     implementation(libs.appcompat)
