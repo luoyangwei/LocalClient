@@ -107,7 +107,7 @@ public class ImageResourceService {
      * @return InputStream
      */
     public InputStream getInputStream(String id) {
-        return DiskLruCacheUtil.getFile(diskLruCache, id);
+        return DiskLruCacheUtil.getFile(id);
     }
 
     /**

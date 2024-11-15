@@ -1,6 +1,5 @@
 package com.luoyangwei.localclient.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,7 +10,6 @@ import com.google.android.material.transition.platform.MaterialArcMotion;
 import com.google.android.material.transition.platform.MaterialContainerTransform;
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
-import com.luoyangwei.localclient.data.source.local.BackgroundResourceLoaderService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
 import com.luoyangwei.localclient.ui.album.AlbumFragment;
 import com.luoyangwei.localclient.ui.cloud.CloudFragment;
@@ -106,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startupBackgroundResourceLoaderService() {
-        Intent intent = new Intent(this, BackgroundResourceLoaderService.class);
-        startForegroundService(intent);
-        Log.i(TAG, "BackgroundResourceLoaderService 启动");
+//        Intent intent = new Intent(this, BackgroundResourceLoaderService.class);
+//        startForegroundService(intent);
+//        Log.i(TAG, "BackgroundResourceLoaderService 启动");
     }
 }

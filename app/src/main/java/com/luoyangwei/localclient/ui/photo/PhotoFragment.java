@@ -1,7 +1,10 @@
 package com.luoyangwei.localclient.ui.photo;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +18,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.gson.Gson;
 import com.luoyangwei.localclient.R;
-import com.luoyangwei.localclient.data.source.local.ImageResourceEntry;
-import com.luoyangwei.localclient.data.source.local.ImageResourceService;
 import com.luoyangwei.localclient.databinding.FragmentPhotoViewBinding;
 import com.luoyangwei.localclient.ui.preview.PreviewActivity;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,21 +37,17 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPhotoViewBinding.inflate(inflater, container, false);
-
-        ImageResourceService imageResourceService = ImageResourceService.getInstance(getContext());
-        List<ImageResourceEntry> resources = imageResourceService.resources();
+        List<PhotoRecyclerViewAdapter.Resource> resources = contentResolverQuery();
 
         adapter = new PhotoRecyclerViewAdapter(getContext(), resources);
         adapter.setOnClickListener(this);
@@ -69,20 +63,31 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         return binding.getRoot();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResourceCallback(ImageResourceEntry entry) {
-        adapter.addItem(entry);
+    public List<PhotoRecyclerViewAdapter.Resource> contentResolverQuery() {
+        ContentResolver contentResolver = requireActivity().getContentResolver();
+        Cursor cursor = query(contentResolver);
+        List<PhotoRecyclerViewAdapter.Resource> resources = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            resources.add(new PhotoRecyclerViewAdapter.Resource(cursor));
+        }
+        return resources;
+    }
+
+    private Cursor query(ContentResolver contentResolver) {
+        return contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null,
+                MediaStore.Images.Media.DATE_ADDED + " DESC");
     }
 
     @Override
-    public void onClick(View view, ImageResourceEntry resource) {
+    public void onClick(View view, PhotoRecyclerViewAdapter.Resource resource) {
         Intent intent = new Intent(getContext(), PreviewActivity.class);
         ImageView imageView = view.findViewById(R.id.photo_imageview);
-        imageView.setTransitionName(resource.getTitle());
+        imageView.setTransitionName(resource.getName());
 
         intent.putExtra("resource", new Gson().toJson(resource));
         ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(),
-                imageView, resource.getTitle());
+                imageView, resource.getName());
         startActivity(intent, activityOptionsCompat.toBundle());
     }
 }

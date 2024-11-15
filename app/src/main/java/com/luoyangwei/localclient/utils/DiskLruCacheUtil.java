@@ -103,7 +103,7 @@ public class DiskLruCacheUtil {
         }
     }
 
-    public InputStream getFile(DiskLruCache diskLruCache, String key) {
+    public InputStream getFile(String key) {
         try {
             DiskLruCache.Snapshot snapshot = diskLruCache.get(hashKeyForDisk(key));
             if (snapshot != null) {
