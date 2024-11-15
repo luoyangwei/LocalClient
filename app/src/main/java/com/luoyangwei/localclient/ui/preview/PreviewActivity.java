@@ -1,12 +1,13 @@
 package com.luoyangwei.localclient.ui.preview;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.luoyangwei.localclient.data.model.ImageResource;
-import com.luoyangwei.localclient.data.source.local.ImageResourceEntry;
+import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.databinding.ActivityPreviewBinding;
 import com.luoyangwei.localclient.ui.ApplicationActivity;
 
@@ -21,23 +22,22 @@ public class PreviewActivity extends ApplicationActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.enableEdgeToEdge();
-
         binding = ActivityPreviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ImageResourceEntry resource = getResourceEntry();
+        // 传过来的数据
+        String resourceId = getIntent().getStringExtra("resourceId");
+        Log.i(TAG, "resourceId: " + resourceId);
 
+        // 启动动画效果
         postponeEnterTransition();
 
-        List<ImageResourceEntry> resources = resourceService.resources();
-
-        initializePreviewViewpager(resources, resource);
-
+//        initializePreviewViewpager(resources, resource);
 //        initializeThumbnails(resource);
     }
 
-    private ImageResourceEntry getResourceEntry() {
-        return getObjectExtra("resource", ImageResourceEntry.class);
+    private Resource getResourceEntry() {
+        return getObjectExtra("resource", Resource.class);
     }
 
     /**
@@ -46,11 +46,12 @@ public class PreviewActivity extends ApplicationActivity {
      * @param resources        所有资源
      * @param selectedResource 选中的资源
      */
-    public void initializePreviewViewpager(List<ImageResourceEntry> resources,
-                                           ImageResourceEntry selectedResource) {
+    public void initializePreviewViewpager(List<Resource> resources,
+                                           Resource selectedResource) {
         PreviewViewPagerAdapter fragmentAdapter = new PreviewViewPagerAdapter(this, resources);
         binding.previewViewpager.setAdapter(fragmentAdapter);
 
+        // 控制选中
         resources.stream().filter(r -> r.getId().equals(selectedResource.getId())).findFirst().ifPresent(r ->
                 binding.previewViewpager.setCurrentItem(resources.indexOf(r), false));
 

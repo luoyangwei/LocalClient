@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.luoyangwei.localclient.data.source.local.ImageResourceService;
 import com.luoyangwei.localclient.utils.BitmapUtil;
 import com.luoyangwei.localclient.utils.DiskLruCacheUtil;
 

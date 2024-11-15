@@ -1,12 +1,7 @@
 package com.luoyangwei.localclient.ui.photo;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.luoyangwei.localclient.R;
+import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.model.Thumbnail;
 import com.luoyangwei.localclient.data.repository.AppDatabase;
-import com.luoyangwei.localclient.utils.DiskLruCacheUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import lombok.Data;
 import lombok.Setter;
 
 /**
@@ -72,29 +62,19 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Resource resource = resources.get(position);
-        Bitmap bitmap;
-
-        // 检查是否有生成缩略图
-        Thumbnail thumbnail = getThumbnail(resource.getId());
-        if (thumbnail == null) {
-            Bitmap sourceBitmap = BitmapFactory.decodeFile(resource.getFullPath());
-            Bitmap thumbnailBitmap = ThumbnailUtils.extractThumbnail(sourceBitmap, 300, 300);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            thumbnailBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            DiskLruCacheUtil.putInputStream(resource.getId(), new ByteArrayInputStream(outputStream.toByteArray()));
-            bitmap = thumbnailBitmap;
-        } else {
-            InputStream inputStream = DiskLruCacheUtil.getFile(resource.getId());
-            bitmap = BitmapFactory.decodeStream(inputStream);
-        }
-
-        holder.imageView.setImageBitmap(bitmap);
+        Log.i(TAG, String.format("View image info [width: %d, height:%d, size: %d]",
+                resource.getBitmap().getWidth(), resource.getBitmap().getHeight(), resource.getBitmap().getByteCount()));
+        holder.imageView.setImageBitmap(resource.getBitmap());
         holder.imageView.setTransitionName(resource.getName());
         holder.imageView.setOnClickListener(v -> onClickListener.onClick(v, resource));
     }
 
+    private void insertThumbnail(Thumbnail thumbnail) {
+        AppDatabase.getInstance(context).thumbnailRepository().insert(thumbnail);
+    }
 
-    public Thumbnail getThumbnail(String resourceId) {
+
+    private Thumbnail getThumbnail(String resourceId) {
         Thumbnail thumbnail;
         try {
             Future<Thumbnail> future = executor.submit(() ->
@@ -119,42 +99,6 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
     interface OnClickListener {
         void onClick(View view, Resource resource);
-    }
-
-    @Data
-    public static class Resource {
-
-        /**
-         * id
-         */
-        private String id;
-
-        /**
-         * 全名（不带后缀）
-         */
-        private String name;
-
-        /**
-         * 全名（带后缀）
-         * a.png
-         */
-        private String fullName;
-
-        /**
-         * 文件全路径
-         */
-        private String fullPath;
-
-        private Integer orientation;
-
-        @SuppressLint("Range")
-        public Resource(Cursor cursor) {
-            setId(String.format(Locale.getDefault(), "%d", cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID))));
-            setName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.TITLE)));
-            setFullName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
-            setFullPath(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
-            setOrientation(cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.ORIENTATION)));
-        }
     }
 
 }

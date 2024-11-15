@@ -16,8 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.transition.platform.MaterialArcMotion;
-import com.luoyangwei.localclient.data.source.local.ImageResourceService;
-import com.luoyangwei.localclient.data.source.local.ImageResourceEntry;
+import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.databinding.FragmentPreviewPagerViewBinding;
 import com.squareup.picasso.Picasso;
 
@@ -25,9 +24,9 @@ public class PreviewViewPagerFragment extends Fragment {
     private static final String TAG = PreviewViewPagerFragment.class.getName();
     private FragmentPreviewPagerViewBinding binding;
 
-    private final ImageResourceEntry resource;
+    private final Resource resource;
 
-    public PreviewViewPagerFragment(ImageResourceEntry resource) {
+    public PreviewViewPagerFragment(Resource resource) {
         this.resource = resource;
     }
 
@@ -35,7 +34,7 @@ public class PreviewViewPagerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPreviewPagerViewBinding.inflate(inflater);
-        binding.previewImageView.setTransitionName(resource.getTitle());
+        binding.previewImageView.setTransitionName(resource.getName());
 
         TransitionSet transitionSet = new TransitionSet();
         transitionSet.addTransition(new ChangeImageTransform())
@@ -48,8 +47,8 @@ public class PreviewViewPagerFragment extends Fragment {
         setSharedElementReturnTransition(transitionSet);
 
 
-        ImageResourceService imageResourceService = ImageResourceService.getInstance(getContext());
-        binding.previewImageView.setImageBitmap(imageResourceService.getBitmap(resource.getId()));
+//        ImageResourceService imageResourceService = ImageResourceService.getInstance(getContext());
+//        binding.previewImageView.setImageBitmap(imageResourceService.getBitmap(resource.getId()));
 
 //        binding.previewImageView.setImageBitmap(loadImageBitmap(10));
 //        backgroundLoadImageResource();

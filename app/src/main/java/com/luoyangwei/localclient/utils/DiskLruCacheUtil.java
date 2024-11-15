@@ -82,10 +82,14 @@ public class DiskLruCacheUtil {
                 IOUtils.copy(inputStream, outputStream);
                 editor.commit();
                 diskLruCache.flush();
+                inputStream.close();
+                outputStream.flush();
+                outputStream.close();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 
     /**
@@ -103,15 +107,11 @@ public class DiskLruCacheUtil {
         }
     }
 
-    public InputStream getFile(String key) {
+    public DiskLruCache.Snapshot getFile(String key) {
         try {
-            DiskLruCache.Snapshot snapshot = diskLruCache.get(hashKeyForDisk(key));
-            if (snapshot != null) {
-                return snapshot.getInputStream(0);
-            }
+            return diskLruCache.get(hashKeyForDisk(key));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 }

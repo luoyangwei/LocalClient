@@ -14,17 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.transition.platform.MaterialArcMotion;
 import com.google.gson.Gson;
-import com.luoyangwei.localclient.data.source.local.ImageResourceService;
 
 public class ApplicationActivity extends AppCompatActivity {
-    protected ImageResourceService resourceService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeMaterialArcMotion();
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        resourceService = ImageResourceService.getInstance(getApplicationContext());
     }
 
     public <T> T getObjectExtra(String name, Class<T> clazz) {
