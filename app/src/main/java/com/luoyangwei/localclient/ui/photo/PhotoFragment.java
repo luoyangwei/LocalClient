@@ -29,7 +29,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +64,11 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 第一个线程：负责加载数据，加载完成后，将数据加入到List，让后显示到页面
-        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::dataLoad, 3, 1, java.util.concurrent.TimeUnit.SECONDS);
-        // 第二个线程：负责读取 List 的数据，然后生成缩略图，生成完成后，将数据更新到 List 和数据库
-        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::generateThumbnails, 4, 1, java.util.concurrent.TimeUnit.SECONDS);
-        // 第三个线程：负责接受文件的变化，如果文件有变化，更新 List
+//        // 第一个线程：负责加载数据，加载完成后，将数据加入到List，让后显示到页面
+//        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::dataLoad, 3, 1, java.util.concurrent.TimeUnit.SECONDS);
+//        // 第二个线程：负责读取 List 的数据，然后生成缩略图，生成完成后，将数据更新到 List 和数据库
+//        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::generateThumbnails, 4, 1, java.util.concurrent.TimeUnit.SECONDS);
+//        // 第三个线程：负责接受文件的变化，如果文件有变化，更新 List
 
 
 //        PeriodicWorkRequest workRequest = new PeriodicWorkRequest
@@ -78,55 +77,6 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
 //        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::generateThumbnails, 3, 1, TimeUnit.SECONDS);
     }
 
-    private final List<Resource> resources = Collections.synchronizedList(new ArrayList<>());
-
-    /**
-     * 数据加载
-     * <br/>
-     * 负责加载数据，加载完成后，将数据加入到List，让后显示到页面
-     */
-    private void dataLoad() {
-        ResourceService resourceService = new ResourceService(requireContext());
-        List<Resource> dataList = resourceService.getResources(r -> true);
-        // 去掉已经加入的，只加入新的
-        dataList.removeAll(resources);
-        resources.addAll(dataList);
-    }
-
-    /**
-     * 生成缩略图
-     * <br/>
-     * 负责读取 List 的数据，然后生成缩略图，生成完成后，将数据更新到 List 和数据库
-     */
-    private void generateThumbnails() {
-        ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
-        for (Resource resource : resources) {
-            // 是否已经在数据库
-            Image image = repository.findById(Long.parseLong(resource.getId()));
-            if (image == null) {
-                image = Image.getInstance(resource);
-                // 生成缩略图
-                File targetFile = new File(image.fullPath);
-                File thumbnailDir = new File(ThumbnailUtils.getOutputThumbnailPath(requireContext())
-                        + File.separator + resource.getBucketName());
-                Image finalImage = image;
-                ThumbnailUtils.generation(requireContext(), targetFile, thumbnailDir, new ThumbnailUtils.CompressListener() {
-                    @Override
-                    public void asyncComplete(File file) {
-                        finalImage.isHasThumbnail = true;
-                        finalImage.thumbnailPath = file.getAbsolutePath();
-                        repository.insert(finalImage);
-                        resource.setThumbnailPath(file.getAbsolutePath());
-                    }
-                });
-            } else {
-                resource.setThumbnailPath(image.thumbnailPath);
-            }
-            requireActivity().runOnUiThread(() -> {
-                adapter.addItem(resource);
-            });
-        }
-    }
 
     @Override
     public void onDestroy() {

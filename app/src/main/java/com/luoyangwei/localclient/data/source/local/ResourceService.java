@@ -25,6 +25,10 @@ public class ResourceService {
         this.context = context;
     }
 
+    public List<Resource> getResources() {
+        return getResources(r -> true);
+    }
+
     /**
      * 查询所有
      *

@@ -7,21 +7,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.luoyangwei.localclient.data.model.Image;
-import com.luoyangwei.localclient.data.model.Thumbnail;
 
 import lombok.Getter;
 
-@Database(entities = {Thumbnail.class, Image.class}, version = 4, exportSchema = false)
+@Database(entities = {Image.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     @Getter
     public static final String databaseName = "local_client";
-
-    /**
-     * 获取缩略图仓库
-     *
-     * @return 缩略图仓库
-     */
-    public abstract ThumbnailRepository thumbnailRepository();
 
     /**
      * 获取图片仓库

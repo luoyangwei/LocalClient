@@ -32,6 +32,15 @@ public interface ImageRepository {
     Image findById(Long id);
 
     /**
+     * 查询图片
+     *
+     * @param resourceId 资源id
+     * @return 图片
+     */
+    @Query("SELECT * FROM images WHERE resource_id = :resourceId")
+    Image findByResourcesId(String resourceId);
+
+    /**
      * 查询全部
      *
      * @return 全部图片

@@ -2,21 +2,28 @@ package com.luoyangwei.localclient.data.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @ToString
-@Entity(tableName = "images")
+@Entity(tableName = "images", indices = {@Index("resource_id")})
 @RequiredArgsConstructor
 public class Image {
 
     /**
      * 主键
      */
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public Long id;
+
+    /**
+     * 资源ID
+     */
+    @ColumnInfo(name = "resource_id")
+    public String resourceId;
 
     /**
      * 媒体文件的标题或名称。
@@ -63,7 +70,8 @@ public class Image {
 
     public static Image getInstance(Resource resource) {
         Image image = new Image();
-        image.id = Long.parseLong(resource.getId());
+//        image.id = Long.parseLong(resource.getId());
+        image.resourceId = resource.getId();
         image.name = resource.getName();
         image.fullPath = resource.getFullPath();
         image.mimeType = resource.getMimeType();
