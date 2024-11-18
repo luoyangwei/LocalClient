@@ -47,13 +47,14 @@ public class ResourceService {
     public Resource getResource(Long id) {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = queryById(contentResolver, id);
+        Resource resource = null;
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                return new Resource(cursor);
+                resource = new Resource(cursor);
             }
             cursor.close();
         }
-        return null;
+        return resource;
     }
 
     private Cursor queryById(ContentResolver contentResolver, Long id) {

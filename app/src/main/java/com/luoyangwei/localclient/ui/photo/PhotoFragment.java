@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.luoyangwei.localclient.R;
@@ -22,24 +21,21 @@ import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.repository.AppDatabase;
 import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.data.source.local.ResourceService;
-import com.luoyangwei.localclient.data.source.local.ThumbnailGenerationWorker;
 import com.luoyangwei.localclient.databinding.FragmentPhotoViewBinding;
 import com.luoyangwei.localclient.ui.preview.PreviewActivity;
 import com.luoyangwei.localclient.utils.ThumbnailUtils;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import top.zibin.luban.Luban;
 
@@ -48,12 +44,8 @@ import top.zibin.luban.Luban;
  */
 public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.OnClickListener {
     private static final String TAG = PhotoFragment.class.getName();
+    private static final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(3);
     private static final ExecutorService executor = Executors.newFixedThreadPool(10);
-
-    /**
-     * 预加载数量
-     */
-    private static final int PRELOADED_COUNT = 10;
 
     /**
      * 首次点击时间
@@ -69,103 +61,94 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
 
     private PhotoRecyclerViewAdapter adapter;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
+        // 第一个线程：负责加载数据，加载完成后，将数据加入到List，让后显示到页面
+        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::dataLoad, 3, 1, java.util.concurrent.TimeUnit.SECONDS);
+        // 第二个线程：负责读取 List 的数据，然后生成缩略图，生成完成后，将数据更新到 List 和数据库
+        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::generateThumbnails, 4, 1, java.util.concurrent.TimeUnit.SECONDS);
+        // 第三个线程：负责接受文件的变化，如果文件有变化，更新 List
+
+
+//        PeriodicWorkRequest workRequest = new PeriodicWorkRequest
+//                .Builder(NewPhotoCheckWorker.class, 1, TimeUnit.MINUTES).build();
+//        WorkManager.getInstance(requireContext()).enqueue(workRequest);
+//        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::generateThumbnails, 3, 1, TimeUnit.SECONDS);
+    }
+
+    private final List<Resource> resources = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * 数据加载
+     * <br/>
+     * 负责加载数据，加载完成后，将数据加入到List，让后显示到页面
+     */
+    private void dataLoad() {
+        ResourceService resourceService = new ResourceService(requireContext());
+        List<Resource> dataList = resourceService.getResources(r -> true);
+        // 去掉已经加入的，只加入新的
+        dataList.removeAll(resources);
+        resources.addAll(dataList);
+    }
+
+    /**
+     * 生成缩略图
+     * <br/>
+     * 负责读取 List 的数据，然后生成缩略图，生成完成后，将数据更新到 List 和数据库
+     */
+    private void generateThumbnails() {
+        ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
+        for (Resource resource : resources) {
+            // 是否已经在数据库
+            Image image = repository.findById(Long.parseLong(resource.getId()));
+            if (image == null) {
+                image = Image.getInstance(resource);
+                // 生成缩略图
+                File targetFile = new File(image.fullPath);
+                File thumbnailDir = new File(ThumbnailUtils.getOutputThumbnailPath(requireContext())
+                        + File.separator + resource.getBucketName());
+                Image finalImage = image;
+                ThumbnailUtils.generation(requireContext(), targetFile, thumbnailDir, new ThumbnailUtils.CompressListener() {
+                    @Override
+                    public void asyncComplete(File file) {
+                        finalImage.isHasThumbnail = true;
+                        finalImage.thumbnailPath = file.getAbsolutePath();
+                        repository.insert(finalImage);
+                        resource.setThumbnailPath(file.getAbsolutePath());
+                    }
+                });
+            } else {
+                resource.setThumbnailPath(image.thumbnailPath);
+            }
+            requireActivity().runOnUiThread(() -> {
+                adapter.addItem(resource);
+            });
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        WorkManager.getInstance(requireContext()).cancelAllWork();
+        scheduledThreadPoolExecutor.getQueue().clear();
     }
 
     private void debugDelete(ImageRepository imageRepository) {
         List<Image> images = imageRepository.find();
+        Log.d(TAG, String.format("要删除 %d 条数据", images.size()));
         for (Image image : images) {
             imageRepository.delete(image);
         }
     }
 
-    /**
-     * 预加载
-     */
-    private List<Resource> preloaded() throws IOException {
-        List<Resource> results = new ArrayList<>();
-        ImageRepository imageRepository = AppDatabase.getInstance(requireContext()).imageRepository();
-
-        // TODO debug
-        debugDelete(imageRepository);
-
-        ResourceService resourceService = new ResourceService(requireContext());
-        List<Resource> resources = resourceService.getResources(resource -> {
-            Image image = imageRepository.findById(Long.parseLong(resource.getId()));
-            return image == null; // 没有加入过数据库纳入到预加载
-        });
-
-        List<Image> images = imageRepository.findHasThumbnail();
-        if (images.isEmpty()) {
-            results.addAll(resources.subList(0, Math.min(resources.size(), PRELOADED_COUNT)));
-        } else {
-            for (Image image : images) {
-                resources.stream().filter(resource -> resource.getId().equals(String.valueOf(image.id)))
-                        .map(resource -> resource.addThumbnail(image))
-                        .findFirst().ifPresent(results::add);
-            }
-        }
-
-        for (Resource resource : results) {
-            Long id = Long.parseLong(resource.getId());
-            Image image = imageRepository.findById(id);
-
-            // 如果是空的，补一条数据
-            if (Objects.isNull(image)) {
-                image = Image.getInstance(resource);
-                imageRepository.insert(image);
-            }
-
-            // 生成缩略图
-            String thumbnailDirectory = ThumbnailUtils.getOutputThumbnailPath(requireContext()) +
-                    File.separator + resource.getBucketName();
-            List<File> paths = Luban.with(requireContext()).load(new File(image.fullPath))
-                    .ignoreBy(50)
-                    .setTargetDir(thumbnailDirectory)
-                    .get();
-            File thumbnailPath = paths.stream().findFirst().orElseThrow();
-
-            // 更新表
-            image.thumbnailPath = thumbnailPath.getAbsolutePath();
-            image.isHasThumbnail = true;
-            imageRepository.update(image);
-
-            // 更新资源
-            resource.setThumbnailPath(image.thumbnailPath);
-        }
-
-        return results;
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPhotoViewBinding.inflate(inflater, container, false);
-
-        // 预加载
-        Future<List<Resource>> futurePreloadedResources = executor.submit(this::preloaded);
-        try {
-            List<Resource> preloadedResources = futurePreloadedResources.get();
-            adapter = new PhotoRecyclerViewAdapter(getContext(), preloadedResources);
-            adapter.setOnClickListener(this);
-
-            PeriodicWorkRequest workRequest = new PeriodicWorkRequest
-                    .Builder(ThumbnailGenerationWorker.class, 5, TimeUnit.SECONDS)
-                    .build();
-            WorkManager.getInstance(requireContext()).enqueue(workRequest);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+        initializeToolbarMenu();
+        adapter = new PhotoRecyclerViewAdapter(getContext(), new ArrayList<>());
+        adapter.setOnClickListener(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
 
         binding.photoRecyclerView.setLayoutManager(gridLayoutManager);
@@ -179,13 +162,64 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         return binding.getRoot();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void resourceChange(Image image) {
-        ResourceService resourceService = new ResourceService(requireContext());
-        Resource resource = resourceService.getResource(image.id);
-        resource.addThumbnail(image);
-        adapter.addItem(resource);
-        Log.i(TAG, "resourceChange" + resource.getId());
+
+    private void initializeLoader() {
+        new Thread(() -> {
+            ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
+            ResourceService resourceService = new ResourceService(requireContext());
+            List<Resource> resources = resourceService.getResources(r -> true);
+            for (Resource resource : resources) {
+
+                // 如果存在缩略图, 就直接添加到列表中
+                Image image = repository.findById(Long.parseLong(resource.getId()));
+                if (image != null) {
+                    resource.addThumbnail(image);
+                }
+
+                if (StringUtils.isBlank(resource.getThumbnailPath())) {
+                    // 没有缩略图就添加缩略图
+                    File targetFile = new File(resource.getFullPath());
+                    File thumbnailDir = new File(ThumbnailUtils.getOutputThumbnailPath(requireContext())
+                            + File.separator + resource.getBucketName());
+                    try {
+                        File thumbnailFile = Luban.with(requireContext()).load(targetFile)
+                                .ignoreBy(100)
+                                .setTargetDir(thumbnailDir.getAbsolutePath())
+                                .get().stream().findFirst().orElseThrow();
+                        image = Image.getInstance(resource);
+                        image.isHasThumbnail = true;
+                        image.thumbnailPath = thumbnailFile.getAbsolutePath();
+                        repository.insert(image);
+                        resource.addThumbnail(image);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                // 追加到列表中
+//                requireActivity().runOnUiThread(() -> adapter.addItem(resource));
+
+            }
+        }).start();
+    }
+
+    private void initializeToolbarMenu() {
+        Map<Integer, Runnable> actions = new HashMap<>();
+        actions.put(R.id.toolbar_photo_delete_item, this::handleDeleteClick);
+        binding.toolbar.setOnMenuItemClickListener(item -> {
+            Runnable action = actions.get(item.getItemId());
+            if (action != null) {
+                action.run();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void handleDeleteClick() {
+        Log.d(TAG, "Delete images table");
+        ImageRepository imageRepository = AppDatabase.getInstance(requireContext()).imageRepository();
+        new Thread(() -> debugDelete(imageRepository)).start();
     }
 
     /**
@@ -214,6 +248,7 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         imageView.setTransitionName(resource.getName());
 
         intent.putExtra("resourceId", resource.getId());
+        intent.putExtra("thumbnailPath", resource.getThumbnailPath());
         ActivityOptionsCompat activityOptionsCompat =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), imageView, resource.getName());
         startActivity(intent, activityOptionsCompat.toBundle());

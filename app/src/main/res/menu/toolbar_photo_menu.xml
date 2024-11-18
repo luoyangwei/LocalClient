@@ -14,4 +14,11 @@
         android:icon="@drawable/ic_outline_search"
         android:title="@string/toolbar_photo_search"
         app:iconTint="@color/md_theme_onSurfaceVariant" />
+
+    <item
+        android:id="@+id/toolbar_photo_delete_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_delete"
+        android:iconTint="@color/md_theme_onSurfaceVariant"
+        android:title="@string/toolbar_photo_delete" />
 </menu>

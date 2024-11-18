@@ -5,10 +5,10 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -18,7 +18,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
 public class Resource {
 
     /**
@@ -85,11 +84,29 @@ public class Resource {
         setDateAdded(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resource resource = (Resource) o;
+        return Objects.equals(id, resource.id) && Objects.equals(name, resource.name)
+                && Objects.equals(fullName, resource.fullName) && Objects.equals(fullPath, resource.fullPath)
+                && Objects.equals(thumbnailPath, resource.thumbnailPath) && Objects.equals(orientation, resource.orientation)
+                && Objects.equals(bucketId, resource.bucketId) && Objects.equals(bucketName, resource.bucketName)
+                && Objects.equals(mimeType, resource.mimeType) && Objects.equals(dateAdded, resource.dateAdded);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, fullName, fullPath, thumbnailPath, orientation, bucketId, bucketName, mimeType, dateAdded);
+    }
+
     /**
      * 添加缩略图
      *
      * @param image 图片
      */
+    @Deprecated
     public Resource addThumbnail(Image image) {
         return setThumbnailPath(image.thumbnailPath);
     }

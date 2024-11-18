@@ -77,7 +77,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                 .into(holder.imageView);
 
         holder.imageView.setTransitionName(resource.getName());
-        holder.imageView.setOnClickListener(v -> onClickListener.onClick(v, resource));
+        holder.imageView.setOnClickListener(v -> onClickListener.onClick(v, null));
     }
 
 

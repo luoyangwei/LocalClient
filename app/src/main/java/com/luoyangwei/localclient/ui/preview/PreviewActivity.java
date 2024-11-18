@@ -8,14 +8,20 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.luoyangwei.localclient.data.model.ImageResource;
 import com.luoyangwei.localclient.data.model.Resource;
+import com.luoyangwei.localclient.data.repository.AppDatabase;
+import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.ActivityPreviewBinding;
 import com.luoyangwei.localclient.ui.ApplicationActivity;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class PreviewActivity extends ApplicationActivity {
     private static final String TAG = PreviewActivity.class.getName();
+    private static final ExecutorService executor = Executors.newFixedThreadPool(2);
 
     private ActivityPreviewBinding binding;
 
@@ -26,27 +32,36 @@ public class PreviewActivity extends ApplicationActivity {
         binding = ActivityPreviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ResourceService resourceService = new ResourceService(this);
-        List<Resource> resources = resourceService.getResources(null);
+        Future<List<Resource>> futureTask = executor.submit(this::asyncResources);
+        try {
+            List<Resource> resources = futureTask.get();
 
-        // 传过来的数据
-        String resourceId = getIntent().getStringExtra("resourceId");
-        Log.i(TAG, "resourceId: " + resourceId);
-        Resource resource = resources.stream()
-                .filter(r -> r.getId().equals(resourceId))
-                .findFirst()
-                .orElseThrow();
+            String resourceId = getIntent().getStringExtra("resourceId");
+            String thumbnailPath = getIntent().getStringExtra("thumbnailPath");
+
+            Resource resource = resources.stream()
+                    .filter(r -> r.getId().equals(resourceId))
+                    .findFirst()
+                    .orElseThrow();
+
+            Log.i(TAG, "resourceId: " + resourceId);
+
+            initializePreviewViewpager(resources, resource);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // 启动动画效果
         postponeEnterTransition();
-
-        initializePreviewViewpager(resources, resource);
-//        initializeThumbnails(resource);
     }
 
-    private Resource getResourceEntry() {
-        return getObjectExtra("resource", Resource.class);
+    public List<Resource> asyncResources() {
+        ImageRepository repository = AppDatabase.getInstance(this).imageRepository();
+        ResourceService resourceService = new ResourceService(this);
+        return resourceService.getResources(resource -> repository.findById(Long.parseLong(resource.getId())) != null);
     }
+
 
     /**
      * 初始化预览 ViewPager

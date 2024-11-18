@@ -47,7 +47,7 @@ public class PreviewViewPagerFragment extends Fragment {
         binding.previewImageView.setTransitionName(resource.getName());
         Glide.with(this)
                 .load(resource.getFullPath())
-//                .onlyRetrieveFromCache(true)
+                .thumbnail(Glide.with(this).load(resource.getThumbnailPath()))
                 .into(binding.previewImageView);
         return binding.getRoot();
     }

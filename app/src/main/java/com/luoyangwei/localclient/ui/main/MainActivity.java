@@ -8,17 +8,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
+import com.luoyangwei.localclient.data.model.Resource;
+import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
+import com.luoyangwei.localclient.ui.SimpleInterestResources;
 import com.luoyangwei.localclient.ui.album.AlbumFragment;
 import com.luoyangwei.localclient.ui.cloud.CloudFragment;
 import com.luoyangwei.localclient.ui.photo.PhotoFragment;
 import com.luoyangwei.localclient.utils.PermissionUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
+    private final SimpleInterestResources simpleInterestResources = SimpleInterestResources.getInstance();
 
     private ActivityMainBinding binding;
 
@@ -33,17 +38,19 @@ public class MainActivity extends AppCompatActivity {
         PermissionUtil.request(this, Permission.READ_MEDIA_IMAGES, Permission.READ_MEDIA_VIDEO,
                 Permission.READ_MEDIA_VISUAL_USER_SELECTED);
 
+        // 初始化存入数据库
+        new Thread(this::initializeImages).start();
+
+        // 测试
         initializeBottomNavigationView();
         initializeDefaultFragment();
     }
-//
-//    private MaterialContainerTransform materialContainerTransformBuilder() {
-//        MaterialContainerTransform transform = new MaterialContainerTransform();
-//        transform.setDuration(30);
-//        transform.addTarget(android.R.id.content);
-//        transform.setPathMotion(new MaterialArcMotion());
-//        return transform;
-//    }
+
+    private void initializeImages() {
+        ResourceService resourceService = new ResourceService(this);
+        List<Resource> resources = resourceService.getResources(r -> true);
+        simpleInterestResources.setResources(resources);
+    }
 
     private void initializeDefaultFragment() {
         getSupportFragmentManager().beginTransaction()
