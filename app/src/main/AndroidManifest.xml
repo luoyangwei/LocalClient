@@ -22,14 +22,6 @@
         android:theme="@style/Theme.LocalClient"
         tools:targetApi="31">
 
-        <service
-            android:name=".data.source.local.ResourceLoaderBackgroundService"
-            android:exported="false" />
-
-        <service
-            android:name=".data.source.local.ThumbnailGenerationService"
-            android:exported="false" />
-
         <meta-data
             android:name="ScopedStorage"
             android:value="true" />

@@ -1,18 +1,13 @@
 package com.luoyangwei.localclient.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.transition.platform.MaterialArcMotion;
-import com.google.android.material.transition.platform.MaterialContainerTransform;
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
-import com.luoyangwei.localclient.data.source.local.ResourceLoaderBackgroundService;
-import com.luoyangwei.localclient.data.source.local.ThumbnailGenerationService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
 import com.luoyangwei.localclient.ui.album.AlbumFragment;
 import com.luoyangwei.localclient.ui.cloud.CloudFragment;
@@ -40,19 +35,15 @@ public class MainActivity extends AppCompatActivity {
 
         initializeBottomNavigationView();
         initializeDefaultFragment();
-//        startupBackgroundResourceLoaderService();
-
-        Intent intent = new Intent(this, ThumbnailGenerationService.class);
-        startService(intent);
     }
-
-    private MaterialContainerTransform materialContainerTransformBuilder() {
-        MaterialContainerTransform transform = new MaterialContainerTransform();
-        transform.setDuration(30);
-        transform.addTarget(android.R.id.content);
-        transform.setPathMotion(new MaterialArcMotion());
-        return transform;
-    }
+//
+//    private MaterialContainerTransform materialContainerTransformBuilder() {
+//        MaterialContainerTransform transform = new MaterialContainerTransform();
+//        transform.setDuration(30);
+//        transform.addTarget(android.R.id.content);
+//        transform.setPathMotion(new MaterialArcMotion());
+//        return transform;
+//    }
 
     private void initializeDefaultFragment() {
         getSupportFragmentManager().beginTransaction()
@@ -104,11 +95,5 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new CloudFragment())
                 .commit();
-    }
-
-    public void startupBackgroundResourceLoaderService() {
-        Intent intent = new Intent(this, ResourceLoaderBackgroundService.class);
-        startService(intent);
-        Log.i(TAG, "BackgroundResourceLoaderService 启动");
     }
 }

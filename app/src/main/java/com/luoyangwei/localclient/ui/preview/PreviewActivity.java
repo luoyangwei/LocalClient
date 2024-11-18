@@ -27,7 +27,7 @@ public class PreviewActivity extends ApplicationActivity {
         setContentView(binding.getRoot());
 
         ResourceService resourceService = new ResourceService(this);
-        List<Resource> resources = resourceService.getResources();
+        List<Resource> resources = resourceService.getResources(null);
 
         // 传过来的数据
         String resourceId = getIntent().getStringExtra("resourceId");

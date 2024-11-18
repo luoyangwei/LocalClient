@@ -68,7 +68,7 @@ dependencies {
     implementation(libs.com.squareup.retrofit2.converter.gson2)
 
     // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
-//    implementation(libs.picasso)
+    //    implementation(libs.picasso)
 
     // https://github.com/bumptech/glide
     implementation(libs.glide)
@@ -85,13 +85,17 @@ dependencies {
     // https://github.com/zetbaitsu/Compressor
     implementation(libs.compressor)
 
+
+    implementation("top.zibin:Luban:1.1.8")
+
     // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava
     implementation(libs.rxjava)
 
     // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxandroid
     implementation(libs.rxandroid.v300)
 
-
+    // https://mvnrepository.com/artifact/androidx.work/work-runtime
+    implementation(libs.work.runtime)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

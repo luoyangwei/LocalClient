@@ -71,7 +71,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                 .priority(Priority.LOW)
                 .centerCrop();
         Glide.with(context)
-                .load(resource.getFullPath())
+                .load(resource.getThumbnailPath())
                 .transition(DrawableTransitionOptions.with(crossFadeFactory))
                 .apply(requestOptions)
                 .into(holder.imageView);
@@ -86,7 +86,6 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
         return resources.size();
     }
 
-    @Deprecated
     public void addItem(Resource entry) {
         resources.add(entry);
         notifyItemInserted(resources.size() - 1);

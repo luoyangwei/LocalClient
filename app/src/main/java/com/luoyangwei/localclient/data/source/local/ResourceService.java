@@ -9,6 +9,7 @@ import com.luoyangwei.localclient.data.model.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * 获取资源的Service
@@ -29,25 +30,43 @@ public class ResourceService {
      *
      * @return resources
      */
-    public List<Resource> getResources() {
+    public List<Resource> getResources(Function<Resource, Boolean> filter) {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = query(contentResolver);
         List<Resource> resources = new ArrayList<>();
         while (cursor.moveToNext()) {
-            resources.add(new Resource(cursor));
+            Resource resource = new Resource(cursor);
+            if (filter != null && filter.apply(resource)) {
+                resources.add(resource);
+            }
         }
         cursor.close();
         return resources;
     }
 
+    public Resource getResource(Long id) {
+        ContentResolver contentResolver = context.getContentResolver();
+        Cursor cursor = queryById(contentResolver, id);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                return new Resource(cursor);
+            }
+            cursor.close();
+        }
+        return null;
+    }
+
+    private Cursor queryById(ContentResolver contentResolver, Long id) {
+        String[] projection = new String[]{};
+        String selection = MediaStore.Images.Media._ID + " = ?";
+        String[] selectionArgs = {id.toString()};
+        return contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
+                selection, selectionArgs, MediaStore.Images.Media.DATE_ADDED + " DESC");
+    }
+
 
     private Cursor query(ContentResolver contentResolver) {
-        String[] projection = new String[]{
-//                MediaStore.Images.Media.TITLE,
-//                MediaStore.Images.Media.DISPLAY_NAME,
-//                MediaStore.Images.Media.DATA,
-//                MediaStore.Images.Media.ORIENTATION
-        };
+        String[] projection = new String[]{};
         return contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
                 null, null, MediaStore.Images.Media.DATE_ADDED + " DESC");
     }

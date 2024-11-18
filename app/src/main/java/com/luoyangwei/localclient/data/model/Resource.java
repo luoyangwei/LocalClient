@@ -43,6 +43,11 @@ public class Resource {
     private String fullPath;
 
     /**
+     * 缩略图路径
+     */
+    private String thumbnailPath;
+
+    /**
      * 方向
      */
     private Integer orientation;
@@ -57,6 +62,16 @@ public class Resource {
      */
     private String bucketName;
 
+    /**
+     * 媒体文件的 MIME 类型，表示文件格式（如 image/heic）。
+     */
+    private String mimeType;
+
+    /**
+     * 媒体文件添加到库中的日期，通常为时间戳（秒）。
+     */
+    private Long dateAdded;
+
     @SuppressLint("Range")
     public Resource(Cursor cursor) {
         setId(String.format(Locale.getDefault(), "%d", cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID))));
@@ -66,6 +81,16 @@ public class Resource {
         setOrientation(cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.ORIENTATION)));
         setBucketId(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)));
         setBucketName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)));
+        setMimeType(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)));
+        setDateAdded(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)));
     }
 
+    /**
+     * 添加缩略图
+     *
+     * @param image 图片
+     */
+    public Resource addThumbnail(Image image) {
+        return setThumbnailPath(image.thumbnailPath);
+    }
 }

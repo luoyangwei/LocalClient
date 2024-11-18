@@ -26,6 +26,8 @@ lifecycleViewmodelKtx = "2.6.1"
 rxandroid = "1.2.1"
 rxandroidVersion = "3.0.0"
 rxjava = "3.1.9"
+thumbnailator = "0.4.8"
+workRuntime = "2.9.1"
 xxpermissions = "20.0"
 
 [libraries]
@@ -57,6 +59,8 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxandroid-v300 = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroidVersion" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
+thumbnailator = { module = "net.coobird:thumbnailator", version.ref = "thumbnailator" }
+work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 
 [plugins]
