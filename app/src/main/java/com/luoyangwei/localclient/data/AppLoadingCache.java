@@ -19,6 +19,7 @@ import java.util.List;
 public class AppLoadingCache {
     private static final String TAG = AppLoadingCache.class.getName();
     private static AppLoadingCache instance;
+    private static List<Resource> resources;
     private static LoadingCache<String, Resource> cache;
 
     /**
@@ -37,7 +38,7 @@ public class AppLoadingCache {
     private static void loadCache(Context context) {
         // 预存数据
         ResourceService resourceService = new ResourceService(context);
-        List<Resource> resources = resourceService.getResources();
+        resources = resourceService.getResources();
         cache = CacheBuilder.newBuilder()
                 // 设置并发级别为当前处理器核心数
                 .concurrencyLevel(Runtime.getRuntime().availableProcessors())
@@ -52,6 +53,10 @@ public class AppLoadingCache {
                         return resourceService.getResource(key);
                     }
                 });
+    }
+
+    public List<Resource> getResources() {
+        return resources;
     }
 
     public Resource get(String key) {

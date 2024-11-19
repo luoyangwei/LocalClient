@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -48,7 +47,7 @@ import lombok.Setter;
 public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = PhotoRecyclerViewAdapter.class.getName();
     private static final ExecutorService executor = Executors.newFixedThreadPool(10);
-    private static final Size THUMBNAIL_SIZE = new Size(500, 500);
+    private static final Size THUMBNAIL_SIZE = new Size(1000, 1000);
 
     private final Activity activity;
     private final Context context;
@@ -88,10 +87,8 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                 .build();
 
         RequestOptions requestOptions = new RequestOptions()
-                .sizeMultiplier(0.5f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .priority(Priority.LOW)
-                .centerCrop();
+                .sizeMultiplier(0.8f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         ResourceService resourceService = new ResourceService(context);
 
@@ -111,7 +108,6 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                 executor.execute(() -> persistenceThumbnail(bitmap, resource, image));
                 requestBuilder = requestManager.load(bitmap);
             } else {
-                Log.i(TAG, "onBindViewHolder: " + image.thumbnailPath);
                 requestBuilder = requestManager.load(image.thumbnailPath);
             }
 
@@ -121,6 +117,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                     .into(holder.imageView));
         });
 
+        holder.imageView.setTag(position);
         holder.imageView.setTransitionName(resource.getName());
         holder.imageView.setOnClickListener(v -> onClickListener.onClick(v, resource));
     }
@@ -132,7 +129,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
         String outputPath = context.getExternalCacheDir() + File.separator + resource.getId() + ".jpg";
         try (FileOutputStream fileOutputStream = new FileOutputStream(outputPath)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fileOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
             fileOutputStream.flush();
         } catch (IOException e) {
             Log.e(TAG, "persistenceThumbnail: ", e);

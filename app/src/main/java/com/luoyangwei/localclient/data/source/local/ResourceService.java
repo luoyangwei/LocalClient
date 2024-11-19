@@ -41,7 +41,6 @@ public class ResourceService {
      * @return resources
      */
     public List<Resource> getResources(Function<Resource, Boolean> filter) {
-        Size size = new Size(500, 500);
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = query(contentResolver);
         List<Resource> resources = new ArrayList<>();

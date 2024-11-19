@@ -16,18 +16,21 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.work.WorkManager;
 
 import com.luoyangwei.localclient.R;
+import com.luoyangwei.localclient.data.AppLoadingCache;
 import com.luoyangwei.localclient.data.model.Image;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.repository.AppDatabase;
 import com.luoyangwei.localclient.data.repository.ImageRepository;
-import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.FragmentPhotoViewBinding;
 import com.luoyangwei.localclient.ui.preview.PreviewActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -58,24 +61,14 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        // 第一个线程：负责加载数据，加载完成后，将数据加入到List，让后显示到页面
-//        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::dataLoad, 3, 1, java.util.concurrent.TimeUnit.SECONDS);
-//        // 第二个线程：负责读取 List 的数据，然后生成缩略图，生成完成后，将数据更新到 List 和数据库
-//        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::generateThumbnails, 4, 1, java.util.concurrent.TimeUnit.SECONDS);
-//        // 第三个线程：负责接受文件的变化，如果文件有变化，更新 List
-
-
-//        PeriodicWorkRequest workRequest = new PeriodicWorkRequest
-//                .Builder(NewPhotoCheckWorker.class, 1, TimeUnit.MINUTES).build();
-//        WorkManager.getInstance(requireContext()).enqueue(workRequest);
-//        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::generateThumbnails, 3, 1, TimeUnit.SECONDS);
+        EventBus.getDefault().register(this);
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         WorkManager.getInstance(requireContext()).cancelAllWork();
         scheduledThreadPoolExecutor.getQueue().clear();
     }
@@ -88,40 +81,23 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         }
     }
 
-    private List<Image> loadImages(int page) {
-        ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
-        return repository.findPaging(page, 100);
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPhotoViewBinding.inflate(inflater, container, false);
         initializeToolbarMenu();
 
-        CompletableFuture<List<Resource>> completableFuture = CompletableFuture.supplyAsync(() -> {
-            ResourceService resourceService = new ResourceService(requireContext());
-            return resourceService.getResources();
+        List<Resource> resources = AppLoadingCache.getInstance(requireContext()).getResources();
+        adapter = new PhotoRecyclerViewAdapter(requireActivity(), requireContext(), resources);
+        adapter.setOnClickListener(this);
+        requireActivity().runOnUiThread(() -> {
+            binding.photoRecyclerView.setAdapter(adapter);
         });
-        completableFuture.thenAccept(resources -> {
-            adapter = new PhotoRecyclerViewAdapter(requireActivity(), requireContext(), resources);
-            adapter.setOnClickListener(this);
-            requireActivity().runOnUiThread(() -> {
-                binding.photoRecyclerView.setAdapter(adapter);
-            });
-        });
+
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
 
         binding.photoRecyclerView.setLayoutManager(gridLayoutManager);
         binding.photoRecyclerView.addItemDecoration(new PhotoRecyclerViewItemDecoration(8));
-
-//        binding.photoRecyclerView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-//            if (scrollY > oldScrollY) {
-//                Log.d(TAG, "Scroll Down");
-//            } else {
-//                Log.d(TAG, "Scroll Up");
-//            }
-//        });
 
         binding.photoRecyclerView.setHasFixedSize(true);
         binding.photoRecyclerView.setAdapter(adapter);
@@ -168,6 +144,18 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eventbusSubscriber(TransitionNameChangedEvent transitionNameChangedEvent) {
+        Log.i(TAG, "TransitionNameChangedEvent" + transitionNameChangedEvent.getName());
+        List<Resource> resources = AppLoadingCache.getInstance(requireContext()).getResources();
+        for (int i = 0; i < resources.size(); i++) {
+            // TODO: 好像没有作用，不是主要功能，可作为优化后续升级
+            if (resources.get(i).getId().equals(transitionNameChangedEvent.getResourceId())) {
+                // 这里是 position
+//                binding.photoRecyclerView.scrollToPosition(i);
+            }
+        }
+    }
 
     @Override
     public void onClick(View view, Resource resource) {
@@ -176,7 +164,7 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         imageView.setTransitionName(resource.getName());
 
         intent.putExtra("resourceId", resource.getId());
-        intent.putExtra("thumbnailPath", resource.getThumbnailPath());
+        intent.putExtra("position", (int) view.getTag());
         ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), imageView, resource.getName());
         startActivity(intent, activityOptionsCompat.toBundle());
     }
