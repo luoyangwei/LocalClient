@@ -37,7 +37,7 @@ public class PreviewActivity extends ApplicationActivity {
             List<Resource> resources = futureTask.get();
 
             String resourceId = getIntent().getStringExtra("resourceId");
-            String thumbnailPath = getIntent().getStringExtra("thumbnailPath");
+//            String thumbnailPath = getIntent().getStringExtra("thumbnailPath");
 
             Resource resource = resources.stream()
                     .filter(r -> r.getId().equals(resourceId))

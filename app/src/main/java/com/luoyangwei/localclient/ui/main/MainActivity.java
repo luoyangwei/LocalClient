@@ -8,10 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
-import com.luoyangwei.localclient.data.model.Image;
 import com.luoyangwei.localclient.data.model.Resource;
-import com.luoyangwei.localclient.data.repository.AppDatabase;
-import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
 import com.luoyangwei.localclient.ui.album.AlbumFragment;
@@ -39,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // 简单的权限授予动作
-        PermissionUtil.request(this, Permission.READ_MEDIA_IMAGES, Permission.READ_MEDIA_VIDEO, Permission.READ_MEDIA_VISUAL_USER_SELECTED);
+        PermissionUtil.request(this,
+                Permission.READ_MEDIA_IMAGES,
+                Permission.READ_MEDIA_VIDEO,
+                Permission.READ_MEDIA_VISUAL_USER_SELECTED);
 
         // 初始化存入数据库
         initializeResources();
@@ -52,14 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private void initializeResources() {
         ResourceService resourceService = new ResourceService(getApplicationContext());
         List<Resource> resources = resourceService.getResources();
-        ImageRepository repository = AppDatabase.getInstance(getApplicationContext()).imageRepository();
+        Log.i(TAG, "Insert " + resources.size() + " images into database");
 
         executor.execute(() -> {
             long currentTimeMillis = System.currentTimeMillis();
-            for (Resource resource : resources) {
-                Image image = Image.getInstance(resource);
-                repository.insert(image);
-            }
             Log.i(TAG, "Thread (" + Thread.currentThread().getId() + ") insert " + resources.size() +
                     " images, cost " + (System.currentTimeMillis() - currentTimeMillis) + "ms");
         });

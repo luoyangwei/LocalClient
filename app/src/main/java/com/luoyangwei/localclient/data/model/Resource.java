@@ -1,7 +1,9 @@
 package com.luoyangwei.localclient.data.model;
 
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.util.Locale;
@@ -26,6 +28,11 @@ public class Resource {
     private String id;
 
     /**
+     * 资源URI
+     */
+    private Uri uri;
+
+    /**
      * 全名（不带后缀）
      */
     private String name;
@@ -45,6 +52,8 @@ public class Resource {
      * 缩略图路径
      */
     private String thumbnailPath;
+
+//    private Bitmap thumbnailBitmap;
 
     /**
      * 方向
@@ -73,7 +82,8 @@ public class Resource {
 
     @SuppressLint("Range")
     public Resource(Cursor cursor) {
-        setId(String.format(Locale.getDefault(), "%d", cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID))));
+        int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+        setId(String.format(Locale.getDefault(), "%d", id));
         setName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.TITLE)));
         setFullName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
         setFullPath(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
@@ -82,6 +92,10 @@ public class Resource {
         setBucketName(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)));
         setMimeType(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)));
         setDateAdded(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)));
+
+        setUri(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id));
+//        Uri thumbUri = Uri.fromFile(new File(getFullPath()));
+//        setUri(thumbUri);
     }
 
     @Override

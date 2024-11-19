@@ -70,7 +70,6 @@ public class Image {
 
     public static Image getInstance(Resource resource) {
         Image image = new Image();
-//        image.id = Long.parseLong(resource.getId());
         image.resourceId = resource.getId();
         image.name = resource.getName();
         image.fullPath = resource.getFullPath();

@@ -85,8 +85,19 @@ dependencies {
     // https://github.com/zetbaitsu/Compressor
     implementation(libs.compressor)
 
+    // 1. Use Guava in your implementation only:
+    implementation("com.google.guava:guava:33.3.1-jre")
 
-    implementation("top.zibin:Luban:1.1.8")
+    // 2. Use Guava types in your public API:
+    api("com.google.guava:guava:33.3.1-jre")
+
+    // 3. Android - Use Guava in your implementation only:
+    implementation(libs.guava)
+
+    // 4. Android - Use Guava types in your public API:
+    api(libs.google.guava)
+
+    implementation(libs.luban)
 
     // https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava
     implementation(libs.rxjava)

@@ -6,6 +6,8 @@ compressor = "3.0.1"
 disklrucache = "2.0.2"
 eventbus = "3.3.1"
 glide = "4.16.0"
+guava = "33.3.1-android"
+guavaVersion = "33.3.1-android"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -37,6 +39,8 @@ compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 disklrucache = { module = "com.jakewharton:disklrucache", version.ref = "disklrucache" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+google-guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

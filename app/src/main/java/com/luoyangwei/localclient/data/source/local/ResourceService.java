@@ -3,10 +3,16 @@ package com.luoyangwei.localclient.data.source.local;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.util.Size;
 
 import com.luoyangwei.localclient.data.model.Resource;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -35,6 +41,7 @@ public class ResourceService {
      * @return resources
      */
     public List<Resource> getResources(Function<Resource, Boolean> filter) {
+        Size size = new Size(500, 500);
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = query(contentResolver);
         List<Resource> resources = new ArrayList<>();
@@ -48,7 +55,29 @@ public class ResourceService {
         return resources;
     }
 
-    public Resource getResource(Long id) {
+    /**
+     * 加载缩略图
+     *
+     * @param uri  图片uri
+     * @param size 缩略图大小
+     * @return 缩略图
+     */
+    public Bitmap loadThumbnail(Uri uri, Size size) {
+        ContentResolver contentResolver = context.getContentResolver();
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                return contentResolver.loadThumbnail(uri, size, null);
+            } else {
+                return MediaStore.Images.Thumbnails.getThumbnail(contentResolver, Long.parseLong(uri.getLastPathSegment()),
+                        MediaStore.Images.Thumbnails.MINI_KIND, null);
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "loadThumbnail: ", e);
+        }
+        return null;
+    }
+
+    public Resource getResource(String id) {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = queryById(contentResolver, id);
         Resource resource = null;
@@ -61,10 +90,10 @@ public class ResourceService {
         return resource;
     }
 
-    private Cursor queryById(ContentResolver contentResolver, Long id) {
+    private Cursor queryById(ContentResolver contentResolver, String id) {
         String[] projection = new String[]{};
         String selection = MediaStore.Images.Media._ID + " = ?";
-        String[] selectionArgs = {id.toString()};
+        String[] selectionArgs = {id};
         return contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection,
                 selection, selectionArgs, MediaStore.Images.Media.DATE_ADDED + " DESC");
     }

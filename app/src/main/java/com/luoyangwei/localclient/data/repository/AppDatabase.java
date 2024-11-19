@@ -12,6 +12,8 @@ import lombok.Getter;
 
 @Database(entities = {Image.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
+    private static AppDatabase instance;
+
     @Getter
     public static final String databaseName = "local_client";
 
@@ -29,9 +31,12 @@ public abstract class AppDatabase extends RoomDatabase {
      * @return 数据库实例
      */
     public static AppDatabase getInstance(Context context) {
-        return Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class,
-                        AppDatabase.getDatabaseName())
-                .fallbackToDestructiveMigration()
-                .build();
+        if (instance == null) {
+            instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class,
+                            AppDatabase.getDatabaseName())
+                    .fallbackToDestructiveMigration()
+                    .build();
+        }
+        return instance;
     }
 }

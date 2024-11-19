@@ -23,20 +23,14 @@ import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.FragmentPhotoViewBinding;
 import com.luoyangwei.localclient.ui.preview.PreviewActivity;
-import com.luoyangwei.localclient.utils.ThumbnailUtils;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-
-import top.zibin.luban.Luban;
 
 /**
  * 照片 Fragment
@@ -64,6 +58,7 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 //        // 第一个线程：负责加载数据，加载完成后，将数据加入到List，让后显示到页面
 //        scheduledThreadPoolExecutor.scheduleWithFixedDelay(this::dataLoad, 3, 1, java.util.concurrent.TimeUnit.SECONDS);
 //        // 第二个线程：负责读取 List 的数据，然后生成缩略图，生成完成后，将数据更新到 List 和数据库
@@ -93,16 +88,40 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         }
     }
 
+    private List<Image> loadImages(int page) {
+        ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
+        return repository.findPaging(page, 100);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPhotoViewBinding.inflate(inflater, container, false);
         initializeToolbarMenu();
-        adapter = new PhotoRecyclerViewAdapter(getContext(), new ArrayList<>());
-        adapter.setOnClickListener(this);
+
+        CompletableFuture<List<Resource>> completableFuture = CompletableFuture.supplyAsync(() -> {
+            ResourceService resourceService = new ResourceService(requireContext());
+            return resourceService.getResources();
+        });
+        completableFuture.thenAccept(resources -> {
+            adapter = new PhotoRecyclerViewAdapter(requireActivity(), requireContext(), resources);
+            adapter.setOnClickListener(this);
+            requireActivity().runOnUiThread(() -> {
+                binding.photoRecyclerView.setAdapter(adapter);
+            });
+        });
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
 
         binding.photoRecyclerView.setLayoutManager(gridLayoutManager);
         binding.photoRecyclerView.addItemDecoration(new PhotoRecyclerViewItemDecoration(8));
+
+//        binding.photoRecyclerView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+//            if (scrollY > oldScrollY) {
+//                Log.d(TAG, "Scroll Down");
+//            } else {
+//                Log.d(TAG, "Scroll Up");
+//            }
+//        });
 
         binding.photoRecyclerView.setHasFixedSize(true);
         binding.photoRecyclerView.setAdapter(adapter);
@@ -110,47 +129,6 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         // 双击返回顶部
         binding.toolbar.setOnClickListener(this::doubleClickSmoothScrollTop);
         return binding.getRoot();
-    }
-
-
-    private void initializeLoader() {
-        new Thread(() -> {
-            ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
-            ResourceService resourceService = new ResourceService(requireContext());
-            List<Resource> resources = resourceService.getResources(r -> true);
-            for (Resource resource : resources) {
-
-                // 如果存在缩略图, 就直接添加到列表中
-                Image image = repository.findById(Long.parseLong(resource.getId()));
-                if (image != null) {
-                    resource.addThumbnail(image);
-                }
-
-                if (StringUtils.isBlank(resource.getThumbnailPath())) {
-                    // 没有缩略图就添加缩略图
-                    File targetFile = new File(resource.getFullPath());
-                    File thumbnailDir = new File(ThumbnailUtils.getOutputThumbnailPath(requireContext())
-                            + File.separator + resource.getBucketName());
-                    try {
-                        File thumbnailFile = Luban.with(requireContext()).load(targetFile)
-                                .ignoreBy(100)
-                                .setTargetDir(thumbnailDir.getAbsolutePath())
-                                .get().stream().findFirst().orElseThrow();
-                        image = Image.getInstance(resource);
-                        image.isHasThumbnail = true;
-                        image.thumbnailPath = thumbnailFile.getAbsolutePath();
-                        repository.insert(image);
-                        resource.addThumbnail(image);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                // 追加到列表中
-//                requireActivity().runOnUiThread(() -> adapter.addItem(resource));
-
-            }
-        }).start();
     }
 
     private void initializeToolbarMenu() {
@@ -199,8 +177,7 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
 
         intent.putExtra("resourceId", resource.getId());
         intent.putExtra("thumbnailPath", resource.getThumbnailPath());
-        ActivityOptionsCompat activityOptionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), imageView, resource.getName());
+        ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), imageView, resource.getName());
         startActivity(intent, activityOptionsCompat.toBundle());
     }
 }

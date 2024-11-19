@@ -37,7 +37,6 @@ public class BitmapUtil {
         return bitmap;
     }
 
-
     public Bitmap rotateBitmap(Bitmap bitmap, Integer angle) {
         if (angle == null) {
             return bitmap;

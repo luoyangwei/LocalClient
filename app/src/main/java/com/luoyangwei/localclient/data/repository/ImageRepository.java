@@ -49,6 +49,16 @@ public interface ImageRepository {
     List<Image> find();
 
     /**
+     * 查询分页
+     *
+     * @param page 页码
+     * @param size 每页大小
+     * @return 分页图片
+     */
+    @Query("SELECT * FROM images LIMIT :size OFFSET :page * :size")
+    List<Image> findPaging(int page, int size);
+
+    /**
      * 查询未生成缩略图的图片
      *
      * @return 未生成缩略图的图片
