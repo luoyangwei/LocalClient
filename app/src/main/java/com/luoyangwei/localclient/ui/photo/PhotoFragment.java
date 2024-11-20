@@ -22,6 +22,7 @@ import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.repository.AppDatabase;
 import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.databinding.FragmentPhotoViewBinding;
+import com.luoyangwei.localclient.ui.main.MatrixImageActivity;
 import com.luoyangwei.localclient.ui.preview.PreviewActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -110,6 +111,7 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
     private void initializeToolbarMenu() {
         Map<Integer, Runnable> actions = new HashMap<>();
         actions.put(R.id.toolbar_photo_delete_item, this::handleDeleteClick);
+        actions.put(R.id.toolbar_photo_test_item, this::handleTestClick);
         binding.toolbar.setOnMenuItemClickListener(item -> {
             Runnable action = actions.get(item.getItemId());
             if (action != null) {
@@ -119,6 +121,12 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
             return false;
         });
     }
+
+    private void handleTestClick() {
+        Intent intent = new Intent(requireActivity(), MatrixImageActivity.class);
+        startActivity(intent);
+    }
+
 
     private void handleDeleteClick() {
         Log.d(TAG, "Delete images table");

@@ -21,4 +21,11 @@
         android:icon="@drawable/ic_outline_delete"
         android:iconTint="@color/md_theme_onSurfaceVariant"
         android:title="@string/toolbar_photo_delete" />
+
+    <item
+        android:id="@+id/toolbar_photo_test_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_delete"
+        android:iconTint="@color/md_theme_onSurfaceVariant"
+        android:title="@string/test" />
 </menu>
