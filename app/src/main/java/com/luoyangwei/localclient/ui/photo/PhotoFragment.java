@@ -155,14 +155,14 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventbusSubscriber(TransitionNameChangedEvent transitionNameChangedEvent) {
         Log.i(TAG, "TransitionNameChangedEvent" + transitionNameChangedEvent.getName());
-        List<Resource> resources = AppLoadingCache.getInstance(requireContext()).getResources();
-        for (int i = 0; i < resources.size(); i++) {
-            // TODO: 好像没有作用，不是主要功能，可作为优化后续升级
-            if (resources.get(i).getId().equals(transitionNameChangedEvent.getResourceId())) {
-                // 这里是 position
-//                binding.photoRecyclerView.scrollToPosition(i);
-            }
-        }
+//        List<Resource> resources = AppLoadingCache.getInstance(requireContext()).getResources();
+//        for (int i = 0; i < resources.size(); i++) {
+//            // TODO: 好像没有作用，不是主要功能，可作为优化后续升级
+////            if (resources.get(i).getId().equals(transitionNameChangedEvent.getResourceId())) {
+////                // 这里是 position
+//////                binding.photoRecyclerView.scrollToPosition(i);
+////            }
+//        }
     }
 
     @Override
@@ -170,6 +170,7 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         Intent intent = new Intent(getContext(), PreviewActivity.class);
         ImageView imageView = view.findViewById(R.id.photo_imageview);
         imageView.setTransitionName(resource.getName());
+//        imageView.animateScaleTypeTransition(ImageView.ScaleType.FIT_CENTER);
 
         intent.putExtra("resourceId", resource.getId());
         intent.putExtra("position", (int) view.getTag());

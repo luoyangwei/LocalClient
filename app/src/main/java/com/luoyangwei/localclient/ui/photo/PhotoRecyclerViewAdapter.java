@@ -111,10 +111,14 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                 requestBuilder = requestManager.load(image.thumbnailPath);
             }
 
-            activity.runOnUiThread(() -> requestBuilder
-                    .transition(DrawableTransitionOptions.with(crossFadeFactory))
-                    .apply(requestOptions)
-                    .into(holder.imageView));
+
+            activity.runOnUiThread(() -> {
+                requestBuilder
+                        .transition(DrawableTransitionOptions.with(crossFadeFactory))
+                        .apply(requestOptions)
+                        .into(holder.imageView);
+            });
+
         });
 
         holder.imageView.setTag(position);

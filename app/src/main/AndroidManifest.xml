@@ -26,9 +26,9 @@
             android:name="ScopedStorage"
             android:value="true" />
 
-        <!--            android:name=".ui.main.MainActivity"-->
+        <!--            android:name=".ui.main.TestImageViewActivity"-->
         <activity
-            android:name=".ui.main.TestImageViewActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

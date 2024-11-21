@@ -5,11 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.transition.ChangeBounds;
-import android.transition.ChangeClipBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.ChangeTransform;
-import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -27,11 +22,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.transition.platform.MaterialArcMotion;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.databinding.FragmentPreviewPagerViewBinding;
-import com.luoyangwei.localclient.ui.photo.ImageViewShareAnimation;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,18 +47,19 @@ public class PreviewViewPagerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPreviewPagerViewBinding.inflate(inflater);
-
-        TransitionSet transitionSet = new TransitionSet();
-        transitionSet
-                .addTransition(new ImageViewShareAnimation())
-                .addTransition(new ChangeImageTransform())
-                .addTransition(new ChangeBounds())
-                .addTransition(new ChangeClipBounds())
-                .addTransition(new ChangeTransform())
-                .setPathMotion(new MaterialArcMotion());
-        transitionSet.setDuration(200L);
-        setSharedElementEnterTransition(transitionSet);
-        setSharedElementReturnTransition(transitionSet);
+//        TransitionSet transitionSet = new TransitionSet();
+//        transitionSet
+////                .addTransition(new PreviewImageViewShareAnimation())
+//                .addTransition(new ChangeImageTransform())
+//                .addTransition(new ChangeBounds())
+//                .addTransition(new ChangeClipBounds())
+//                .addTransition(new ChangeTransform())
+//                .setPathMotion(new MaterialArcMotion());
+//        transitionSet.setDuration(200);
+//        transitionSet.setInterpolator(MotionUtils.resolveThemeInterpolator(requireContext(),
+//                com.google.android.material.R.attr.motionEasingStandardInterpolator, new FastOutSlowInInterpolator()));
+//        setSharedElementEnterTransition(transitionSet);
+//        setSharedElementReturnTransition(transitionSet);
 
         RequestOptions requestOptions = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);

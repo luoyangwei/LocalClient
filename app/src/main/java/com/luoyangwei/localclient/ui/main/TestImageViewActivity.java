@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,8 @@ public class TestImageViewActivity extends AppCompatActivity implements View.OnT
     private static final String TAG = TestImageViewActivity.class.getName();
     private ActivityTestImageviewBinding binding;
 
+    private boolean isCenterCrop = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,15 @@ public class TestImageViewActivity extends AppCompatActivity implements View.OnT
         setContentView(binding.getRoot());
         Resource resource = getResource();
         binding.imageView.setImageBitmap(getImageBitmap(resource));
+
+        binding.button.setOnClickListener(v -> {
+            if (!isCenterCrop) {
+                binding.imageView.animateScaleTypeTransition(ImageView.ScaleType.CENTER_CROP);
+            } else {
+                binding.imageView.animateScaleTypeTransition(ImageView.ScaleType.FIT_CENTER);
+            }
+            isCenterCrop = !isCenterCrop;
+        });
     }
 
     @Override
@@ -39,9 +51,6 @@ public class TestImageViewActivity extends AppCompatActivity implements View.OnT
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-
-        // 设置为 fitCenter
-//        binding.imageView.toFitCenter();
     }
 
 

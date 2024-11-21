@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--    <com.luoyangwei.localclient.ui.main.PreviewImageView-->
+    <!--        android:id="@+id/photo_imageview"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:adjustViewBounds="true"-->
+    <!--        android:transitionName="preview_transition_name"-->
+    <!--        app:layout_constraintDimensionRatio="1:1"-->
+    <!--        app:matrixScaleType="centerCrop"-->
+    <!--        tools:ignore="ContentDescription,MissingConstraints" />-->
+
     <ImageView
         android:id="@+id/photo_imageview"
         android:layout_width="match_parent"
