@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.WorkManager;
 
+import com.bumptech.glide.Glide;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.AppLoadingCache;
 import com.luoyangwei.localclient.data.model.Image;
@@ -145,6 +146,9 @@ public class PhotoFragment extends Fragment implements PhotoRecyclerViewAdapter.
         String transitionName = resource.getId();
         imageView.setTransitionName(transitionName);
         intent.putExtra("resourceId", transitionName);
+
+        // 预加载
+        executor.execute(() -> Glide.with(this).load(resource.getFullPath()).preload());
 
         ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), imageView, transitionName);
         startActivity(intent, activityOptionsCompat.toBundle());
