@@ -5,19 +5,24 @@ commonsLang3Version = "3.12.0"
 compressor = "3.0.1"
 disklrucache = "2.0.2"
 eventbus = "3.3.1"
+fresco = "2.1.0"
 glide = "4.16.0"
+googleGuava = "33.3.1-jre"
+googleGuavaVersion = "33.3.1-jre"
 guava = "33.3.1-android"
 guavaVersion = "33.3.1-android"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
+libraryVersion = "1.4.1"
 luban = "1.1.8"
 material = "1.12.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 gson = "2.11.0"
 lombok = "1.18.34"
+photoview = "2.0.0"
 picasso = "2.8"
 retrofit = "2.11.0"
 roomRuntime = "2.6.1"
@@ -38,15 +43,20 @@ commons-io-commons-io = { module = "commons-io:commons-io", version.ref = "commo
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 disklrucache = { module = "com.jakewharton:disklrucache", version.ref = "disklrucache" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
+fresco = { module = "com.facebook.fresco:fresco", version.ref = "fresco" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 google-guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
+google-guava-v3331jre = { module = "com.google.guava:guava", version.ref = "googleGuavaVersion" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+guava-v3331jre = { module = "com.google.guava:guava", version.ref = "googleGuava" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 com-squareup-retrofit2-converter-gson2 = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 luban = { module = "top.zibin:Luban", version.ref = "luban" }
+photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photoview" }
+photoview-library = { module = "com.bm.photoview:library", version.ref = "libraryVersion" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
@@ -64,6 +74,7 @@ rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroi
 rxandroid-v300 = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroidVersion" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 thumbnailator = { module = "net.coobird:thumbnailator", version.ref = "thumbnailator" }
+vito-view = { module = "com.facebook.fresco:vito-view", version.ref = "fresco" }
 work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 

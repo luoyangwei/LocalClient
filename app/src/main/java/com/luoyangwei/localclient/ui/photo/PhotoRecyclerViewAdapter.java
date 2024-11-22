@@ -78,6 +78,13 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
         return new ViewHolder(view);
     }
 
+    private CompletableFuture<Image> supplyAsyncCompletableFuture(Resource resource) {
+        return CompletableFuture.supplyAsync(() -> {
+            ImageRepository repository = AppDatabase.getInstance(context).imageRepository();
+            return repository.findByResourcesId(resource.getId());
+        });
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Resource resource = resources.get(position);
@@ -94,11 +101,7 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
 
         // 创建线程去生成文件
         // 已经有缩略图的情况下就不需要再调用 resourceService.loadThumbnail 来生成缩略图, 虽然 resourceService.loadThumbnail 已经很快了。
-        CompletableFuture.supplyAsync(() -> {
-            ImageRepository repository = AppDatabase.getInstance(context).imageRepository();
-            return repository.findByResourcesId(resource.getId());
-        }).thenAccept(image -> {
-
+        supplyAsyncCompletableFuture(resource).thenAccept(image -> {
             RequestManager requestManager = Glide.with(context);
             RequestBuilder<Drawable> requestBuilder;
 
@@ -111,14 +114,13 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
                 requestBuilder = requestManager.load(image.thumbnailPath);
             }
 
-
             activity.runOnUiThread(() -> {
+                requestBuilder.apply(requestOptions).preload();
                 requestBuilder
                         .transition(DrawableTransitionOptions.with(crossFadeFactory))
                         .apply(requestOptions)
                         .into(holder.imageView);
             });
-
         });
 
         holder.imageView.setTag(position);

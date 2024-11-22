@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.luoyangwei.localclient.ui.main.PreviewImageView
+    <ImageView
         android:id="@+id/preview_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:minHeight="500dp"
         android:transitionName="preview_transition_name"
-        app:matrixScaleType="fitCenter"
         tools:ignore="ContentDescription,MissingConstraints" />
 
 </FrameLayout>

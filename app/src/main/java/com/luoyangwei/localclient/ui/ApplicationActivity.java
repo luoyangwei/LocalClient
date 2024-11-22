@@ -15,7 +15,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.transition.platform.MaterialArcMotion;
 import com.google.gson.Gson;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ApplicationActivity extends AppCompatActivity {
+
+    /**
+     * 默认动画时长
+     */
+    protected static final int DEFAULT_ANIMATION_DURATION = 300;
+
+    /**
+     * 默认动画延迟时长
+     */
+    protected static final int DEFAULT_ANIMATION_DELAY_DURATION = 400;
+
+    /**
+     * 默认固定线程池数量
+     */
+    protected static final int DEFAULT_FIXED_THREAD_POOL_COUNT = 10;
+
+    /**
+     * 默认线程池
+     */
+    protected static final ExecutorService executor = Executors.newFixedThreadPool(DEFAULT_FIXED_THREAD_POOL_COUNT);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

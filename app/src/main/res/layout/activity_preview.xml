@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.luoyangwei.localclient.ui.preview.PreviewSwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,28 +9,27 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/preview_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
 
-    <LinearLayout
-        android:id="@+id/preview_bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:adjustViewBounds="true"
-        android:background="@color/md_theme_background"
-        android:elevation="5dp"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical">
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/preview_bottom_layout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:adjustViewBounds="true"-->
+    <!--        android:background="@color/md_theme_background"-->
+    <!--        android:elevation="5dp"-->
+    <!--        android:fitsSystemWindows="true"-->
+    <!--        android:orientation="vertical">-->
 
-        <!--  图片列表 -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/preview_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
+    <!--        &lt;!&ndash;  图片列表 &ndash;&gt;-->
+    <!--        <androidx.recyclerview.widget.RecyclerView-->
+    <!--            android:id="@+id/preview_recycler_view"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp" />-->
 
-        <!--  操作项目 -->
-        <include layout="@layout/bottom_photo_button_view" />
-    </LinearLayout>
-</com.luoyangwei.localclient.ui.preview.PreviewSwipeBackLayout>
+    <!--        &lt;!&ndash;  操作项目 &ndash;&gt;-->
+    <!--        <include layout="@layout/bottom_photo_button_view" />-->
+    <!--    </LinearLayout>-->
+</FrameLayout>

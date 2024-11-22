@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -13,6 +14,7 @@ public class MatrixUtil {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @ToString
     public static class Axis {
         private float scaleY;
         private float scaleX;

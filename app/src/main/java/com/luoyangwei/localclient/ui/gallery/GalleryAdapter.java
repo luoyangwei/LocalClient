@@ -1,6 +1,4 @@
-package com.luoyangwei.localclient.ui.preview;
-
-import android.app.Activity;
+package com.luoyangwei.localclient.ui.gallery;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,24 +9,27 @@ import com.luoyangwei.localclient.data.model.Resource;
 
 import java.util.List;
 
-public class PreviewViewPagerAdapter extends FragmentStateAdapter {
+/**
+ * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+ * sequence.
+ */
+public class GalleryAdapter extends FragmentStateAdapter {
     private final List<Resource> resources;
-    private final Activity activity;
 
-    public PreviewViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Resource> resources) {
+    public GalleryAdapter(@NonNull FragmentActivity fragmentActivity, List<Resource> resources) {
         super(fragmentActivity);
-        this.activity = fragmentActivity;
         this.resources = resources;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return new PreviewViewPagerFragment(activity, resources.get(position));
+        return new GalleryFragment(resources.get(position));
     }
 
     @Override
     public int getItemCount() {
         return resources.size();
     }
+
 }

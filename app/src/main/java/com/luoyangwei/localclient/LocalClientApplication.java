@@ -13,8 +13,6 @@ public class LocalClientApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "ImageResourceService 初始化");
-//        DiskLruCacheUtil.initDiskLruCache(getExternalCacheDir());
-        //        ImageResourceService.refreshInstance(getApplicationContext());
     }
 
 }

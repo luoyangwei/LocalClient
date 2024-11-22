@@ -26,7 +26,6 @@
             android:name="ScopedStorage"
             android:value="true" />
 
-        <!--            android:name=".ui.main.TestImageViewActivity"-->
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
@@ -39,6 +38,10 @@
 
         <activity
             android:name=".ui.preview.PreviewActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.gallery.GalleryActivity"
             android:exported="true" />
 
         <activity

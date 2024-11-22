@@ -1,14 +1,19 @@
 package com.luoyangwei.localclient.ui.preview;
 
 import android.os.Bundle;
+import android.transition.ChangeBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.ChangeTransform;
+import android.transition.TransitionSet;
+import android.view.Window;
 
 import androidx.annotation.Nullable;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.bumptech.glide.Glide;
+import com.google.android.material.motion.MotionUtils;
 import com.luoyangwei.localclient.data.AppLoadingCache;
 import com.luoyangwei.localclient.data.model.Image;
-import com.luoyangwei.localclient.data.model.ImageResource;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.repository.AppDatabase;
 import com.luoyangwei.localclient.data.repository.ImageRepository;
@@ -35,9 +40,20 @@ public class PreviewActivity extends ApplicationActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.enableEdgeToEdge();
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         binding = ActivityPreviewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        TransitionSet transitionSet = new TransitionSet();
+        transitionSet.addTransition(new ChangeBounds());
+        transitionSet.addTransition(new ChangeTransform());
+        transitionSet.addTransition(new ChangeImageTransform());
+//        transitionSet.setDuration(300);
+        transitionSet.setInterpolator(MotionUtils.resolveThemeInterpolator(getApplicationContext(),
+                com.google.android.material.R.attr.motionEasingStandardInterpolator, new FastOutSlowInInterpolator()));
+        getWindow().setSharedElementEnterTransition(transitionSet);
+        getWindow().setSharedElementExitTransition(transitionSet);
 
         // 进入页面后直接展示缩略图
         String resourceId = getIntent().getStringExtra("resourceId");
@@ -61,8 +77,7 @@ public class PreviewActivity extends ApplicationActivity {
      * @param selectedResource 选中的资源
      */
     @SneakyThrows
-    public void initializePreviewViewpager(List<Resource> resources,
-                                           Resource selectedResource) {
+    public void initializePreviewViewpager(List<Resource> resources, Resource selectedResource) {
         ImageRepository repository = AppDatabase.getInstance(getApplicationContext()).imageRepository();
         Image image = CompletableFuture.supplyAsync(() -> repository.findByResourcesId(selectedResource.getId())).get();
 
@@ -89,73 +104,7 @@ public class PreviewActivity extends ApplicationActivity {
                         .build();
                 EventBus.getDefault().post(transitionNameChangedEvent);
             }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                startPostponedEnterTransition();
-            }
         });
+        binding.previewViewpager.post(this::startPostponedEnterTransition);
     }
-
-    @SneakyThrows
-    private void preload(int position) {
-        List<Resource> resources = AppLoadingCache.getInstance(getApplicationContext()).getResources();
-        ImageRepository repository = AppDatabase.getInstance(getApplicationContext()).imageRepository();
-        if (position > 0) {
-            Resource previousResource = resources.get(position - 1);
-            Image image = CompletableFuture.supplyAsync(() -> repository.findByResourcesId(previousResource.getId())).get();
-            previousResource.setThumbnailPath(image.thumbnailPath);
-
-            executor.execute(() -> Glide.with(getApplicationContext()).load(previousResource.getThumbnailPath())
-                    .preload());
-            executor.execute(() -> Glide.with(getApplicationContext()).load(previousResource.getFullPath())
-                    .preload());
-        }
-        if (position < resources.size() - 1) {
-            Resource nextResource = resources.get(position + 1);
-            Image image = CompletableFuture.supplyAsync(() -> repository.findByResourcesId(nextResource.getId())).get();
-            nextResource.setThumbnailPath(image.thumbnailPath);
-
-            executor.execute(() -> Glide.with(getApplicationContext()).load(nextResource.getThumbnailPath())
-                    .preload());
-            executor.execute(() -> Glide.with(getApplicationContext()).load(nextResource.getFullPath())
-                    .preload());
-        }
-    }
-
-    private void initializeThumbnails(ImageResource resource) {
-//        new Thread(() -> {
-//            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//            binding.previewRecyclerView.setLayoutManager(linearLayoutManager);
-//            ImageResourceDao imageResourceDao = ImageResourceDao.getInstance();
-//
-//            // DEBUG: 只显示 30 个
-//            List<ImageResource> resources = imageResourceDao.resources(1, 30);
-//            binding.previewRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//                @Override
-//                public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-//                    super.getItemOffsets(outRect, view, parent, state);
-//                }
-//            });
-//
-//            runOnUiThread(() -> {
-//                // 设置初始状态
-//                binding.previewBottomLayout.setAlpha(0f);
-//                binding.previewBottomLayout.setTranslationY(30f);
-//
-//                // 设置列表数据
-//                binding.previewRecyclerView.setAdapter(
-//                        new PreviewThumbnailsRecyclerViewAdapter(this, resource.getId(), resources));
-//
-//                // 更新为新状态
-//                binding.previewBottomLayout.animate()
-//                        .alpha(1)
-//                        .translationY(0f)
-//                        .setDuration(400)
-//                        .start();
-//            });
-//        }).start();
-    }
-
 }

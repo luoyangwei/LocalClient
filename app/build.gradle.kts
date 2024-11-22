@@ -55,6 +55,9 @@ dependencies {
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     implementation(libs.xxpermissions)
 
+    // https://github.com/bm-x/PhotoView
+    implementation(libs.photoview.library)
+
     implementation(libs.legacy.support.v4)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
@@ -66,9 +69,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation(libs.com.squareup.retrofit2.converter.gson2)
-
-    // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
-    //    implementation(libs.picasso)
 
     // https://github.com/bumptech/glide
     implementation(libs.glide)
@@ -86,10 +86,10 @@ dependencies {
     implementation(libs.compressor)
 
     // 1. Use Guava in your implementation only:
-    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation(libs.guava.v3331jre)
 
     // 2. Use Guava types in your public API:
-    api("com.google.guava:guava:33.3.1-jre")
+    api(libs.google.guava.v3331jre)
 
     // 3. Android - Use Guava in your implementation only:
     implementation(libs.guava)

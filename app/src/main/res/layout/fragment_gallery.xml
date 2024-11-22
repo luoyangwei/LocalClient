@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.luoyangwei.localclient.ui.main.PreviewImageView
+    <ImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="matrix" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/test" />
+        android:layout_gravity="center"
+        android:minHeight="500dp"
+        android:scaleType="fitCenter"
+        android:transitionName="preview_transition_name"
+        tools:ignore="ContentDescription,MissingConstraints" />
 
 </FrameLayout>
