@@ -13,20 +13,23 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Image;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.repository.AppDatabase;
 import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.databinding.FragmentGalleryBinding;
-import com.luoyangwei.localclient.ui.preview.PostponeEnterTransitionHelper;
 
 import java.util.concurrent.CompletableFuture;
 
 import lombok.SneakyThrows;
 
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends Fragment implements RequestListener<Drawable> {
     private static final String TAG = GalleryFragment.class.getName();
     private final RequestOptions requestOptions = new RequestOptions();
     private FragmentGalleryBinding binding;
@@ -54,25 +57,39 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
-        ViewPager2 viewPager2 = requireActivity().findViewById(R.id.viewpager);
-
+        ViewPager2 viewPager = requireActivity().findViewById(R.id.viewpager);
         binding.imageView.setTransitionName(resource.getId());
-        binding.imageView.setDisplay(requireActivity().getWindowManager().getDefaultDisplay());
-        binding.imageView.setOnZoomListener(bool -> viewPager2.setUserInputEnabled(!bool));
-
+        binding.imageView.setMaximumScale(5f);
+        binding.imageView.setMinimumScale(1f);
+        binding.imageView.setOnScaleChangeListener((scaleFactor, focusX, focusY) -> viewPager.setUserInputEnabled(scaleFactor == 1f));
 
         ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
         Image image = CompletableFuture.supplyAsync(() -> repository.findByResourcesId(resource.getId())).get();
 
-        PostponeEnterTransitionHelper.loadImageWithTransition(
-                requireActivity(),
-                Glide.with(this)
-                        .load(image.thumbnailPath)
-                        .dontAnimate()
-                        .apply(requestOptions),
-                binding.imageView);
-        binding.imageView.postDelayed(this::asyncOriginalImageLoad, 300);
+        Glide.with(this)
+                .load(image.thumbnailPath)
+                .dontAnimate()
+                .apply(requestOptions)
+                .listener(this)
+                .into(binding.imageView);
         return binding.getRoot();
+    }
+
+    @Override
+    public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model,
+                                @NonNull Target<Drawable> target, boolean isFirstResource) {
+        requireActivity().startPostponedEnterTransition();
+        asyncOriginalImageLoad();
+        return false;
+    }
+
+    @Override
+    public boolean onResourceReady(@NonNull Drawable resource,
+                                   @NonNull Object model, Target<Drawable> target,
+                                   @NonNull DataSource dataSource, boolean isFirstResource) {
+        requireActivity().startPostponedEnterTransition();
+        asyncOriginalImageLoad();
+        return false;
     }
 
     /**
@@ -80,9 +97,12 @@ public class GalleryFragment extends Fragment {
      */
     @SneakyThrows
     private void asyncOriginalImageLoad() {
-        RequestBuilder<Drawable> requestBuilder = Glide.with(this)
-                .load(resource.getFullPath())
-                .placeholder(binding.imageView.getDrawable());
-        requireActivity().runOnUiThread(() -> requestBuilder.into(binding.imageView));
+        binding.imageView.postDelayed(() -> {
+            RequestBuilder<Drawable> requestBuilder = Glide.with(this)
+                    .load(resource.getFullPath())
+                    .placeholder(binding.imageView.getDrawable());
+            requireActivity().runOnUiThread(() -> requestBuilder.into(binding.imageView));
+        }, 300);
+
     }
 }

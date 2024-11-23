@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.2"
+alexvasilkovGestureViews = "2.8.3"
 commonsIoVersion = "2.17.0"
 commonsLang3Version = "3.12.0"
 compressor = "3.0.1"
@@ -23,6 +24,7 @@ constraintlayout = "2.1.4"
 gson = "2.11.0"
 lombok = "1.18.34"
 photoview = "2.0.0"
+photoviewVersion = "2.3.0"
 picasso = "2.8"
 retrofit = "2.11.0"
 roomRuntime = "2.6.1"
@@ -39,6 +41,7 @@ xxpermissions = "20.0"
 
 [libraries]
 apache-commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3Version" }
+com-alexvasilkov-gesture-views = { module = "com.alexvasilkov:gesture-views", version.ref = "alexvasilkovGestureViews" }
 commons-io-commons-io = { module = "commons-io:commons-io", version.ref = "commonsIoVersion" }
 compressor = { module = "id.zelory:compressor", version.ref = "compressor" }
 disklrucache = { module = "com.jakewharton:disklrucache", version.ref = "disklrucache" }
@@ -57,6 +60,7 @@ com-squareup-retrofit2-converter-gson2 = { module = "com.squareup.retrofit2:conv
 luban = { module = "top.zibin:Luban", version.ref = "luban" }
 photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photoview" }
 photoview-library = { module = "com.bm.photoview:library", version.ref = "libraryVersion" }
+photoview-v230 = { module = "com.github.chrisbanes:PhotoView", version.ref = "photoviewVersion" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }

@@ -36,6 +36,10 @@ android {
 
 dependencies {
 
+    // PhotoView
+    // https://github.com/Baseflow/PhotoView
+    implementation(libs.photoview.v230)
+
     // Disk LRU Cache
     // A cache that uses a bounded amount of space on a filesystem. Each cache entry has a string key and a fixed number of values.
     // Each key must match the regex [a-z0-9_-]{1,120}.
