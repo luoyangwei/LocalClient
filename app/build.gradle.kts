@@ -59,9 +59,6 @@ dependencies {
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     implementation(libs.xxpermissions)
 
-    // https://github.com/bm-x/PhotoView
-    implementation(libs.photoview.library)
-
     implementation(libs.legacy.support.v4)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
