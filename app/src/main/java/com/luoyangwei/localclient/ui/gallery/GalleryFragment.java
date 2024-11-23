@@ -144,6 +144,7 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
                         v.setTranslationY(v.getTranslationY() + deltaY);
                         v.setScaleX(scale);
                         v.setScaleY(scale);
+                        // TODO 支持根据下滑幅度设置透明度
                         return true; // 拦截事件
                     }
                 }
