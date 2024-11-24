@@ -40,7 +40,6 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
     private final RequestOptions requestOptions = new RequestOptions();
     private FragmentGalleryBinding binding;
     private final Resource resource;
-    private GestureDetector gestureDetector;
     private ViewPager2 viewPager;
 
     public GalleryFragment(Resource resource) {
@@ -72,9 +71,6 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
         binding.imageView.setMaximumScale(5f);
         binding.imageView.setMediumScale(3f);
         binding.imageView.setMinimumScale(1f);
-        binding.imageView.setOnScaleChangeListener((scaleFactor, focusX, focusY) -> viewPager.setUserInputEnabled(scaleFactor == 1f));
-
-//        gestureDetector = new GestureDetector(requireContext(), new ImageViewGestureListener(binding.imageView));
         binding.imageView.setOnTouchListener(this);
 
         ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
@@ -129,7 +125,6 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startY = event.getY();
-                viewPager.setUserInputEnabled(false);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -141,6 +136,7 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
                 if (attacher.getScale() <= attacher.getMinimumScale()) {
                     // 仅当未缩放时，处理下滑逻辑
                     if (deltaY > 0) {
+                        viewPager.setUserInputEnabled(false);
                         v.setTranslationY(v.getTranslationY() + deltaY);
                         v.setScaleX(scale);
                         v.setScaleY(scale);
@@ -152,7 +148,7 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
 
             case MotionEvent.ACTION_UP:
                 Log.i(TAG, "onTouch: " + v.getTranslationY());
-                if (v.getTranslationY() >= 800) {
+                if (v.getTranslationY() >= 600) {
                     requireActivity().getOnBackPressedDispatcher().onBackPressed(); // 返回逻辑
                 } else {
                     v.animate()
