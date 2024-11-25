@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Local Client</string>
     <string name="bottom_navigation_photo">图片</string>
-    <string name="bottom_navigation_album">相册</string>
+    <string name="bottom_navigation_album">影集</string>
     <string name="bottom_navigation_cloud">云</string>
     <string name="toolbar_photo_search">搜索</string>
     <string name="toolbar_photo_edit">编辑</string>

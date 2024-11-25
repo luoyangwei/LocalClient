@@ -35,7 +35,7 @@ public class AppLoadingCache {
         return instance;
     }
 
-    private static void loadCache(Context context) {
+    public static void loadCache(Context context) {
         // 预存数据
         ResourceService resourceService = new ResourceService(context);
         resources = resourceService.getResources();
