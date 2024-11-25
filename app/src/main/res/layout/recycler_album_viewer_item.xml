@@ -6,12 +6,11 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/photo_imageview"
+        android:id="@+id/album_viewer_imageview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:transitionName="preview_transition_name"
         app:layout_constraintDimensionRatio="1:1"
         tools:ignore="ContentDescription,MissingConstraints" />
 

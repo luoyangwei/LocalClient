@@ -3,14 +3,12 @@ package com.luoyangwei.localclient.ui.main;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
+import com.luoyangwei.localclient.ui.ApplicationActivity;
 import com.luoyangwei.localclient.ui.album.AlbumFragment;
 import com.luoyangwei.localclient.ui.cloud.CloudFragment;
 import com.luoyangwei.localclient.ui.photo.PhotoFragment;
@@ -22,7 +20,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ApplicationActivity {
     private static final String TAG = MainActivity.class.getName();
     private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
@@ -31,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        super.enableEdgeToEdge();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

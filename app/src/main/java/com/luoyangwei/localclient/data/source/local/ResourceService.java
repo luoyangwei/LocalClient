@@ -10,12 +10,17 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 
+import com.luoyangwei.localclient.data.model.Bucket;
 import com.luoyangwei.localclient.data.model.Resource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 获取资源的Service
@@ -87,6 +92,37 @@ public class ResourceService {
             cursor.close();
         }
         return resource;
+    }
+
+    /**
+     * 获取资源 Bucket
+     *
+     * @return buckets
+     */
+    public List<Bucket> getBuckets() {
+        List<Resource> resources = getResources();
+
+        // 取出重复项
+        Map<String, String> bucketMap = new HashMap<>();
+        resources.forEach(resource ->
+                bucketMap.put(resource.getBucketId(), resource.getBucketName()));
+
+        List<Bucket> buckets = new ArrayList<>();
+        for (String bucketId : bucketMap.keySet()) {
+            List<Resource> bucketResources = resources.stream().filter(resource -> resource.getBucketId().equals(bucketId))
+                    .collect(Collectors.toList());
+            Resource resource = bucketResources.get(bucketResources.size() - 1);
+            Bucket bucket = new Bucket();
+            bucket.setId(bucketId)
+                    .setName(bucketMap.get(bucketId));
+            bucket.setResources(bucketResources);
+            bucket.setCount(bucketResources.size());
+            bucket.setMostRecentResourceId(resource.getId());
+            buckets.add(bucket);
+        }
+        return buckets.stream()
+                .sorted(Comparator.comparingInt(Bucket::getCount).reversed())
+                .collect(Collectors.toList());
     }
 
     private Cursor queryById(ContentResolver contentResolver, String id) {

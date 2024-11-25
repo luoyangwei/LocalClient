@@ -37,15 +37,11 @@
         </activity>
 
         <activity
-            android:name=".ui.preview.PreviewActivity"
-            android:exported="true" />
-
-        <activity
             android:name=".ui.gallery.GalleryActivity"
             android:exported="true" />
 
         <activity
-            android:name=".ui.preview.PreviewDetailsActivity"
+            android:name=".ui.album.viewer.AlbumViewerActivity"
             android:exported="true" />
 
     </application>

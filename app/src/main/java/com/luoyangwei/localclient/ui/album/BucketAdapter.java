@@ -1,6 +1,7 @@
 package com.luoyangwei.localclient.ui.album;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.AppLoadingCache;
 import com.luoyangwei.localclient.data.model.Bucket;
 import com.luoyangwei.localclient.data.model.Resource;
+import com.luoyangwei.localclient.ui.album.viewer.AlbumViewerActivity;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +27,7 @@ import java.util.Locale;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class AlbumBucketAdapter extends RecyclerView.Adapter<AlbumBucketAdapter.ViewHolder> {
+public class BucketAdapter extends RecyclerView.Adapter<BucketAdapter.ViewHolder> {
     private static final int DEFAULT_ITEM_WIDTH = 500;
     private static final int DEFAULT_ITEM_HEIGHT = 500;
     private static final float DEFAULT_ITEM_RADIUS = 56;
@@ -36,12 +38,14 @@ public class AlbumBucketAdapter extends RecyclerView.Adapter<AlbumBucketAdapter.
      * ViewHolder
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final View root;
         private final ImageView imageView;
         private final TextView bucketName;
         private final TextView bucketCount;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            root = itemView;
             imageView = itemView.findViewById(R.id.album_imageview);
             bucketName = itemView.findViewById(R.id.album_bucket_name);
             bucketCount = itemView.findViewById(R.id.album_bucket_count);
@@ -84,9 +88,14 @@ public class AlbumBucketAdapter extends RecyclerView.Adapter<AlbumBucketAdapter.
                 .centerCrop()
                 .into(holder.imageView);
         imageViewClipToOutline(holder.imageView, DEFAULT_ITEM_RADIUS);
-
         holder.bucketName.setText(bucket.getName());
         holder.bucketCount.setText(String.format(Locale.getDefault(), "%d", bucket.getCount()));
+
+        holder.root.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AlbumViewerActivity.class);
+            intent.putExtra("bucketId", bucket.getId());
+            context.startActivity(intent);
+        });
     }
 
     private void imageViewClipToOutline(ImageView imageView, float radius) {
