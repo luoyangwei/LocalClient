@@ -3,6 +3,8 @@ package com.luoyangwei.localclient.ui.main;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
 import com.hjq.permissions.Permission;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
@@ -30,6 +32,7 @@ public class MainActivity extends ApplicationActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.enableEdgeToEdge();
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_theme_surfaceContainer));
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

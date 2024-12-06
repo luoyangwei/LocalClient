@@ -11,11 +11,9 @@ import android.view.Window;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.transition.platform.MaterialArcMotion;
 import com.google.gson.Gson;
-import com.luoyangwei.localclient.R;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -70,6 +68,6 @@ public class ApplicationActivity extends AppCompatActivity {
 
     protected void enableEdgeToEdge() {
         EdgeToEdge.enable(this);
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_theme_surfaceContainer));
+//        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.md_theme_background));
     }
 }

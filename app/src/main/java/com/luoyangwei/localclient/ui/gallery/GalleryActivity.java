@@ -5,6 +5,7 @@ import android.transition.Transition;
 import android.transition.TransitionInflater;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.AppLoadingCache;
@@ -24,6 +25,8 @@ public class GalleryActivity extends ApplicationActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.enableEdgeToEdge();
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.bottom_button_layout_background));
+
         binding = ActivityGalleryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
