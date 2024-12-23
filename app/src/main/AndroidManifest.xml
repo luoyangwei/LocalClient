@@ -39,9 +39,6 @@
         <activity
             android:name=".view.preview.PreviewActivity"
             android:exported="true" />
-        <activity
-            android:name=".view.gallery.GalleryActivity"
-            android:exported="true" />
 
         <activity
             android:name=".view.album.viewer.AlbumViewerActivity"
