@@ -55,6 +55,9 @@ public class PicturesFragment extends Fragment implements PicturesItemOnClickLis
 
     private List<Resource> resources;
 
+    private Resource clickedResource;
+    private ImageView onClickedImageView;
+
     private int page = 1;
     private static final int PAGE_SIZE = 50;  // 每次加载条数据
 
@@ -81,6 +84,15 @@ public class PicturesFragment extends Fragment implements PicturesItemOnClickLis
         prepareSharedElementTransition();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (onClickedImageView != null) {
+            onClickedImageView.setTransitionName(clickedResource.getId());
+        }
     }
 
     private void prepareSharedElementTransition() {
@@ -119,17 +131,14 @@ public class PicturesFragment extends Fragment implements PicturesItemOnClickLis
 
     @Override
     public void onClick(View v, int position, Resource resource) {
-//        Glide.with(requireContext())
-//                .load(resource.getFullPath())
-//                .apply(GlideUtil.defaultOptions())
-//                .preload();
-
         Intent intent = new Intent(requireContext(), PreviewActivity.class);
         intent.putExtra("resourceId", resource.getId());
 
-        ImageView imageView = v.findViewById(R.id.pictures_item);
+        clickedResource = resource;
+        onClickedImageView = v.findViewById(R.id.pictures_item);
+
         ActivityOptionsCompat activityOptionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), imageView, resource.getId());
+                ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), onClickedImageView, resource.getId());
         startActivity(intent, activityOptionsCompat.toBundle());
     }
 

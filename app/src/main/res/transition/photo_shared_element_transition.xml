@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="@integer/material_motion_duration_short_2"
-    android:interpolator="?attr/motionEasingStandardInterpolator"
+    android:interpolator="?attr/motionEasingStandardDecelerateInterpolator"
     android:transitionOrdering="together">
     <changeClipBounds />
     <changeTransform />

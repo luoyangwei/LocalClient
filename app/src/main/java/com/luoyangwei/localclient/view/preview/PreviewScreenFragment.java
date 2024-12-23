@@ -19,12 +19,15 @@ import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.databinding.FragmentPreviewScreenBinding;
 import com.luoyangwei.localclient.utils.GlideUtil;
 
+import lombok.Getter;
+
 public class PreviewScreenFragment extends Fragment {
     private static final String TAG = "PreviewScreenFragment";
 
     private FragmentPreviewScreenBinding binding;
 
     private final Activity activity;
+    @Getter
     private final Resource resource;
     private final int position;
 
