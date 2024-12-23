@@ -60,8 +60,7 @@ public class GlideUtil {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .encodeFormat(Bitmap.CompressFormat.WEBP)
                 .format(DecodeFormat.PREFER_RGB_565)
-                .placeholder(R.drawable.placeholder)
-                .override(300);
+                .placeholder(R.drawable.placeholder);
     }
 
 //    public <R> ResourceRequestListener<Bitmap, R> bitmapRequestListener(R data, Function<R, Boolean> failedCallback, Function<R, Boolean> readyCallback) {

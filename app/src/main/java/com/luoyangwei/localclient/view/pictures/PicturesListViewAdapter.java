@@ -2,7 +2,6 @@ package com.luoyangwei.localclient.view.pictures;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
+import com.luoyangwei.localclient.utils.GlideUtil;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -78,26 +74,16 @@ public class PicturesListViewAdapter extends RecyclerView.Adapter<PicturesListVi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RequestOptions requestOptions = RequestOptions
-                .downsampleOf(DownsampleStrategy.AT_LEAST)
-                .dontTransform()
-                .dontAnimate()
-                .encodeQuality(10)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .encodeFormat(Bitmap.CompressFormat.WEBP)
-                .format(DecodeFormat.PREFER_RGB_565)
-                .placeholder(R.drawable.placeholder)
-                .override(300);
-
         Resource resource = resources.get(position);
         Glide.with(context)
                 .load(resource.getFullPath())
-//                .apply(requestOptions)
+                .apply(GlideUtil.defaultOptions())
+                .override(300)
                 .into(holder.imageView);
 
         String resourceId = resource.getId();
-//        holder.imageView.setTransitionName(resourceId);
 
+        holder.imageView.setTransitionName(resourceId);
         holder.imageView.setOnClickListener(view -> itemOnClick.onClick(view, position, resource));
     }
 

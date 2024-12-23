@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
+import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.databinding.FragmentPreviewScreenBinding;
 import com.luoyangwei.localclient.utils.GlideUtil;
@@ -35,18 +38,21 @@ public class PreviewScreenFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPreviewScreenBinding.inflate(inflater, container, false);
+        ViewPager2 viewPager = activity.findViewById(R.id.viewpager);
 
         binding.imageView.setTransitionName(resource.getId());
-        binding.imageView.setMaximumScale(5f);
-        binding.imageView.setMediumScale(4f);
+        binding.imageView.setMaximumScale(4f);
         binding.imageView.setMinimumScale(1f);
+        PhotoViewAttacher attacher = binding.imageView.getAttacher();
+
+        // 检查照片是原尺寸就可以滑动
+        attacher.setOnScaleChangeListener((scaleFactor, focusX, focusY) ->
+                viewPager.setUserInputEnabled(Math.round(attacher.getScale()) == attacher.getMinimumScale()));
 
         Glide.with(activity.getApplicationContext())
                 .load(resource.getFullPath())
-//                .override(500)
                 .sizeMultiplier(0.5f)
-                .dontTransform()
-                .dontAnimate()
+                .apply(GlideUtil.defaultOptions())
                 .listener(GlideUtil.drawableRequestListener(resource, drawable -> {
                     activity.startPostponedEnterTransition();
                     binding.imageView.postDelayed(() ->
