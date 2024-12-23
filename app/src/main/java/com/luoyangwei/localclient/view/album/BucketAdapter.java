@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.album;
+package com.luoyangwei.localclient.view.album;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +19,7 @@ import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.AppLoadingCache;
 import com.luoyangwei.localclient.data.model.Bucket;
 import com.luoyangwei.localclient.data.model.Resource;
-import com.luoyangwei.localclient.ui.album.viewer.AlbumViewerActivity;
+import com.luoyangwei.localclient.view.album.viewer.AlbumViewerActivity;
 
 import java.util.List;
 import java.util.Locale;

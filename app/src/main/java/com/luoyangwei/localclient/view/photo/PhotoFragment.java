@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.photo;
+package com.luoyangwei.localclient.view.photo;
 
 import android.content.Intent;
 import android.graphics.Rect;
@@ -25,7 +25,7 @@ import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.repository.AppDatabase;
 import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.databinding.FragmentPhotoViewBinding;
-import com.luoyangwei.localclient.ui.gallery.GalleryActivity;
+import com.luoyangwei.localclient.view.gallery.GalleryActivity;
 import com.luoyangwei.localclient.utils.EventUtils;
 
 import java.util.HashMap;

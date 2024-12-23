@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.album.viewer;
+package com.luoyangwei.localclient.view.album.viewer;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

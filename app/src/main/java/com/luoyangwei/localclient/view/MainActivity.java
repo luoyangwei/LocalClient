@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.main;
+package com.luoyangwei.localclient.view;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +10,10 @@ import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.ActivityMainBinding;
-import com.luoyangwei.localclient.ui.ApplicationActivity;
-import com.luoyangwei.localclient.ui.album.AlbumFragment;
-import com.luoyangwei.localclient.ui.cloud.CloudFragment;
-import com.luoyangwei.localclient.ui.photo.PhotoFragment;
 import com.luoyangwei.localclient.utils.PermissionUtil;
+import com.luoyangwei.localclient.view.album.AlbumFragment;
+import com.luoyangwei.localclient.view.cloud.CloudFragment;
+import com.luoyangwei.localclient.view.pictures.PicturesFragment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +63,7 @@ public class MainActivity extends ApplicationActivity {
     }
 
     private void initializeDefaultFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PhotoFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PicturesFragment()).commit();
     }
 
     private void initializeBottomNavigationView() {
@@ -88,7 +87,7 @@ public class MainActivity extends ApplicationActivity {
      */
     private void handlePhotoClick() {
         Log.i(TAG, "handlePhotoClick");
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PhotoFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PicturesFragment()).commit();
     }
 
     /**

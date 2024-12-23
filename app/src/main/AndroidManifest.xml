@@ -27,7 +27,7 @@
             android:value="true" />
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,11 +37,14 @@
         </activity>
 
         <activity
-            android:name=".ui.gallery.GalleryActivity"
+            android:name=".view.preview.PreviewActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.gallery.GalleryActivity"
             android:exported="true" />
 
         <activity
-            android:name=".ui.album.viewer.AlbumViewerActivity"
+            android:name=".view.album.viewer.AlbumViewerActivity"
             android:exported="true" />
 
     </application>

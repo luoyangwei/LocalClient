@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.gallery;
+package com.luoyangwei.localclient.view.gallery;
 
 import android.os.Bundle;
 import android.transition.Transition;
@@ -11,7 +11,7 @@ import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.AppLoadingCache;
 import com.luoyangwei.localclient.data.model.Resource;
 import com.luoyangwei.localclient.databinding.ActivityGalleryBinding;
-import com.luoyangwei.localclient.ui.ApplicationActivity;
+import com.luoyangwei.localclient.view.ApplicationActivity;
 
 import java.util.List;
 

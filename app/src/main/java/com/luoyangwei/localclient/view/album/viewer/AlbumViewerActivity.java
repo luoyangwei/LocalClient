@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.album.viewer;
+package com.luoyangwei.localclient.view.album.viewer;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.luoyangwei.localclient.data.model.Bucket;
 import com.luoyangwei.localclient.data.source.local.ResourceService;
 import com.luoyangwei.localclient.databinding.ActivityAlbumViewerBinding;
-import com.luoyangwei.localclient.ui.ApplicationActivity;
+import com.luoyangwei.localclient.view.ApplicationActivity;
 
 public class AlbumViewerActivity extends ApplicationActivity {
     private static final String TAG = AlbumViewerActivity.class.getName();

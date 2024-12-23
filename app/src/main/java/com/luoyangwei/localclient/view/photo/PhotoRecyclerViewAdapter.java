@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.photo;
+package com.luoyangwei.localclient.view.photo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -137,6 +137,9 @@ public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecycler
         try (FileOutputStream fileOutputStream = new FileOutputStream(outputPath)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
             fileOutputStream.flush();
+            if (!bitmap.isRecycled()) {
+                bitmap.recycle();
+            }
         } catch (IOException e) {
             Log.e(TAG, "persistenceThumbnail: ", e);
         }

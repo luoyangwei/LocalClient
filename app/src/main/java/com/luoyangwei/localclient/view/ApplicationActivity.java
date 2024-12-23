@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui;
+package com.luoyangwei.localclient.view;
 
 import android.os.Bundle;
 import android.transition.ChangeBounds;

@@ -1,12 +1,12 @@
-package com.luoyangwei.localclient.ui.gallery;
+package com.luoyangwei.localclient.view.gallery;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,16 +22,9 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
-import com.luoyangwei.localclient.R;
-import com.luoyangwei.localclient.data.model.Image;
 import com.luoyangwei.localclient.data.model.Resource;
-import com.luoyangwei.localclient.data.repository.AppDatabase;
-import com.luoyangwei.localclient.data.repository.ImageRepository;
 import com.luoyangwei.localclient.databinding.FragmentGalleryBinding;
-
-import java.util.concurrent.CompletableFuture;
 
 import lombok.SneakyThrows;
 
@@ -65,7 +58,7 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
-        viewPager = requireActivity().findViewById(R.id.viewpager);
+//        viewPager = requireActivity().findViewById(R.id.viewpager);
 
         binding.imageView.setTransitionName(resource.getId());
         binding.imageView.setMaximumScale(5f);
@@ -73,12 +66,10 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
         binding.imageView.setMinimumScale(1f);
         binding.imageView.setOnTouchListener(this);
 
-        ImageRepository repository = AppDatabase.getInstance(requireContext()).imageRepository();
-        Image image = CompletableFuture.supplyAsync(() -> repository.findByResourcesId(resource.getId())).get();
-
         Glide.with(this)
-                .load(image.thumbnailPath)
+                .load(resource.getFullPath())
                 .dontAnimate()
+                .dontTransform()
                 .apply(requestOptions)
                 .listener(this)
                 .into(binding.imageView);
@@ -117,14 +108,21 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
     }
 
     private float startY = 0;
+    private VelocityTracker velocityTracker;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         PhotoViewAttacher attacher = binding.imageView.getAttacher();
+        if (velocityTracker == null) {
+            velocityTracker = VelocityTracker.obtain();
+        }
+        velocityTracker.addMovement(event);
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startY = event.getY();
+                velocityTracker.clear();
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -132,6 +130,9 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
                 float deltaY = currentY - startY;
                 // 计算缩放比例，缩放范围 [0.5, 1.0]
                 float scale = Math.max(0.5f, v.getScaleX() - (deltaY / binding.imageView.getHeight()));
+                velocityTracker.computeCurrentVelocity(1000);
+                float velocityY = velocityTracker.getYVelocity();
+                Log.i(TAG, "velocityY: " + velocityY);
 
                 if (attacher.getScale() <= attacher.getMinimumScale()) {
                     // 仅当未缩放时，处理下滑逻辑
@@ -160,31 +161,12 @@ public class GalleryFragment extends Fragment implements RequestListener<Drawabl
                 }
                 viewPager.setUserInputEnabled(true);
                 break;
+
+            case MotionEvent.ACTION_CANCEL:
+                velocityTracker.recycle();
+                velocityTracker = null;
+                break;
         }
         return binding.imageView.getAttacher().onTouch(v, event); // 始终将事件传递给 PhotoView
-    }
-
-    private static class ImageViewGestureListener extends GestureDetector.SimpleOnGestureListener {
-        private final PhotoView target;
-        private float startY = 0;
-
-        public ImageViewGestureListener(PhotoView target) {
-            this.target = target;
-        }
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            startY = e.getY();
-            return super.onDown(e);
-        }
-
-        @Override
-        public boolean onScroll(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
-            if (Math.abs(distanceY) > Math.abs(distanceX) && distanceY < 0) {
-                Log.i(TAG, "distanceY: " + distanceY);
-                target.setTranslationY(target.getTranslationY() - distanceY);
-            }
-            return false;
-        }
     }
 }

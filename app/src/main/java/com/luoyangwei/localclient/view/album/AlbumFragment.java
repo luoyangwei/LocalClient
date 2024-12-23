@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.album;
+package com.luoyangwei.localclient.view.album;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

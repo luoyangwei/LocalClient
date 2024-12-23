@@ -1,4 +1,4 @@
-package com.luoyangwei.localclient.ui.cloud;
+package com.luoyangwei.localclient.view.cloud;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
