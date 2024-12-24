@@ -1,5 +1,5 @@
 <resources>
-    <color name="bottom_button_layout_background">#F215130B</color>
+    <color name="bottom_button_layout_background">#8015130B</color>
     <color name="md_theme_primary">#DBC66E</color>
     <color name="md_theme_onPrimary">#3A3000</color>
     <color name="md_theme_primaryContainer">#534600</color>

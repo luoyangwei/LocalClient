@@ -54,18 +54,15 @@ public class PreviewScreenFragment extends Fragment {
 
         Glide.with(activity.getApplicationContext())
                 .load(resource.getFullPath())
-                .sizeMultiplier(0.5f)
-                .apply(GlideUtil.defaultOptions())
-                .listener(GlideUtil.drawableRequestListener(resource, drawable -> {
+                .sizeMultiplier(0.8f)
+//                .thumbnail(
+//                        Glide.with(activity.getApplicationContext())
+//                                .load(resource.getFullPath())
+//                                .sizeMultiplier(0.1f)
+//                                .apply(GlideUtil.defaultOptions())
+//                )
+                .listener(GlideUtil.drawableRequestListener(binding.imageView, (drawable) -> {
                     activity.startPostponedEnterTransition();
-                    binding.imageView.postDelayed(() ->
-                                    Glide.with(activity.getApplicationContext())
-                                            .load(resource.getFullPath())
-                                            .dontTransform()
-                                            .dontAnimate()
-                                            .placeholder(drawable)
-                                            .into(binding.imageView)
-                            , 260);
                     return false;
                 }))
                 .into(binding.imageView);

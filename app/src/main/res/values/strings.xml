@@ -7,4 +7,7 @@
     <string name="toolbar_photo_edit">编辑</string>
     <string name="toolbar_photo_delete">删除</string>
     <string name="test">测试</string>
+    <string name="preview_toolbar_operation_upload_cloud">Upload Cloud</string>
+    <string name="preview_toolbar_operation_favorites">Favorites</string>
+    <string name="preview_toolbar_operation_set">Set</string>
 </resources>

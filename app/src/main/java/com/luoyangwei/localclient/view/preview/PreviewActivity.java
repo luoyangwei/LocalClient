@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.SharedElementCallback;
+import androidx.core.content.ContextCompat;
 
 import com.luoyangwei.localclient.R;
 import com.luoyangwei.localclient.data.AppLoadingCache;
@@ -28,6 +29,8 @@ public class PreviewActivity extends ApplicationActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         enableEdgeToEdge();
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, android.R.color.transparent));
+
         prepareSharedElementTransition();
 
         binding = ActivityPreviewBinding.inflate(getLayoutInflater());
@@ -39,6 +42,7 @@ public class PreviewActivity extends ApplicationActivity {
 
         adapter = new PreviewScreenSlidePagerAdapter(this, this, resources);
         binding.viewpager.setAdapter(adapter);
+        binding.viewpager.setOffscreenPageLimit(1);
         binding.viewpager.setCurrentItem(resources.indexOf(resource), false);
 
         postponeEnterTransition();

@@ -137,6 +137,10 @@ public class PicturesFragment extends Fragment implements PicturesItemOnClickLis
         clickedResource = resource;
         onClickedImageView = v.findViewById(R.id.pictures_item);
 
+//        Glide.with(requireContext())
+//                .load(resource.getFullPath())
+//                .preload();
+
         ActivityOptionsCompat activityOptionsCompat =
                 ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), onClickedImageView, resource.getId());
         startActivity(intent, activityOptionsCompat.toBundle());
