@@ -37,10 +37,12 @@ public class PicturesListViewAdapter extends RecyclerView.Adapter<PicturesListVi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final View item;
         private final ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            item = itemView;
             imageView = itemView.findViewById(R.id.pictures_item);
         }
     }

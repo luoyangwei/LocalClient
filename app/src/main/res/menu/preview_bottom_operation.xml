@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/bottom_like"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_favorite_border"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
+        tools:ignore="HardcodedText,MenuTitle" />
+    <item
+        android:id="@+id/button_edit"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_edit"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
+        tools:ignore="HardcodedText,MenuTitle" />
+    <item
+        android:id="@+id/button_ai"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_grain"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
+        tools:ignore="HardcodedText,MenuTitle" />
+    <item
+        android:id="@+id/button_share"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_share"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
+        tools:ignore="HardcodedText,MenuTitle" />
+    <item
+        android:id="@+id/button_delete"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_delete"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
+        tools:ignore="HardcodedText,MenuTitle" />
+</menu>

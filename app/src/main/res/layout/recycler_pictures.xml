@@ -11,6 +11,7 @@
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:tag="recycler_pictures__pictures_item"
         android:transitionName="preview_image"
         app:layout_constraintDimensionRatio="1:1"
         tools:ignore="ContentDescription,MissingConstraints" />
