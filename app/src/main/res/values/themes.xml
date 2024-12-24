@@ -1,13 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Transparent background style -->
-    <style name="Theme.SwipeBackStyle" parent="Theme.LocalClient">
-        <item name="android:background">@color/md_theme_background</item>
-        <!--        <item name="android:windowNoTitle">true</item>-->
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <!--        <item name="android:colorBackgroundCacheHint">@null</item>-->
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-    </style>
 
     <style name="Theme.LocalClient" parent="AppTheme">
         <item name="android:windowContentTransitions">true</item>
@@ -107,4 +98,5 @@
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
     </style>
+
 </resources>

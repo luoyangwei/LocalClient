@@ -4,6 +4,5 @@
     android:id="@+id/bottom_navigation_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/bottom_button_layout_background"
     android:fitsSystemWindows="true"
     app:menu="@menu/bottom_navigation_menu" />
