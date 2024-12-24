@@ -8,10 +8,11 @@
 
     <Button
         android:id="@+id/bottom_like"
-        style="?attr/materialIconButtonStyle"
+        style="?attr/materialIconButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_outline_favorite_border"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toLeftOf="parent"
         tools:ignore="ContentDescription,MissingConstraints" />
@@ -22,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_outline_edit"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toRightOf="@id/bottom_like"
         tools:ignore="ContentDescription,MissingConstraints" />
@@ -32,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_outline_grain"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toRightOf="@id/button_edit"
         tools:ignore="ContentDescription,MissingConstraints" />
@@ -42,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_outline_share"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toRightOf="@id/button_ai"
         tools:ignore="ContentDescription,MissingConstraints" />
@@ -52,6 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_outline_delete"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="ContentDescription,MissingConstraints" />

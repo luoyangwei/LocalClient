@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/photo_item"
         android:enabled="true"
         android:icon="@drawable/ic_outline_photo"
-        android:title="@string/bottom_navigation_photo" />
+        android:title="@string/bottom_navigation_photo"
+        app:iconTint="@color/md_theme_onSurfaceVariant" />
     <item
         android:id="@+id/album_item"
         android:enabled="true"
         android:icon="@drawable/ic_outline_album"
-        android:title="@string/bottom_navigation_album" />
+        android:title="@string/bottom_navigation_album"
+        app:iconTint="@color/md_theme_onSurfaceVariant" />
     <item
         android:id="@+id/cloud_item"
         android:enabled="true"
         android:icon="@drawable/ic_outline_cloud"
-        android:title="@string/bottom_navigation_cloud" />
+        android:title="@string/bottom_navigation_cloud"
+        app:iconTint="@color/md_theme_onSurfaceVariant" />
 </menu>

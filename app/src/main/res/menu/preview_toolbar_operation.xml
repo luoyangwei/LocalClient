@@ -2,30 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--    <item-->
-    <!--        android:id="@+id/toolbar_photo_search_item"-->
-    <!--        android:enabled="true"-->
-    <!--        android:icon="@drawable/ic_outline_search"-->
-    <!--        android:title="@string/toolbar_photo_search"-->
-    <!--        app:iconTint="@color/md_theme_onSurfaceVariant"-->
-    <!--        app:showAsAction="always" />-->
-
     <item
         android:id="@+id/preview_toolbar_operation_upload_cloud"
         android:enabled="true"
         android:icon="@drawable/ic_outline_cloud_upload"
         android:title="@string/preview_toolbar_operation_upload_cloud"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:showAsAction="always" />
     <item
         android:id="@+id/preview_toolbar_operation_favorites"
         android:enabled="true"
         android:icon="@drawable/ic_outline_star_outline"
         android:title="@string/preview_toolbar_operation_favorites"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:showAsAction="always" />
     <item
         android:id="@+id/preview_toolbar_operation_set"
         android:enabled="true"
         android:icon="@drawable/ic_outline_center_focus_strong"
         android:title="@string/preview_toolbar_operation_set"
+        app:iconTint="@color/md_theme_onSurfaceVariant"
         app:showAsAction="ifRoom" />
 </menu>
